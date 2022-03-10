@@ -112,6 +112,12 @@
                 <version>1.33</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-annotations</artifactId>
+                <version>3.0.3</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

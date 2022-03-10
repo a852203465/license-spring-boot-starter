@@ -1,6 +1,8 @@
 package cn.darkjrong.license.core.common.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,6 +15,7 @@ import java.util.Date;
  * @date 2022/03/10
  */
 @Data
+@ApiModel("License生成参数")
 public class LicenseCreatorParam implements Serializable {
 
     private static final long serialVersionUID = -7793154252684580872L;
@@ -20,6 +23,7 @@ public class LicenseCreatorParam implements Serializable {
     /**
      * 证书主题
      */
+    @ApiModelProperty(value = "证书主题")
     private String subject;
 
     /**
