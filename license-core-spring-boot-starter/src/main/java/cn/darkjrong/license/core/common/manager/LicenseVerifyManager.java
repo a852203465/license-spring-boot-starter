@@ -78,8 +78,6 @@ public class LicenseVerifyManager {
         // 创建License证书管理器对象
         LicenseManager licenseManager = new LicenseCustomManager(licenseParam);
 
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
         // 开始校验证书
         try {
             LicenseContent licenseContent = licenseManager.verify();
@@ -94,8 +92,8 @@ public class LicenseVerifyManager {
             logger.error("证书未安装!, {}", ex.getMessage());
             throw new LicenseException("证书未安装, 请检查证书");
         } catch (Exception e){
-            logger.error("证书校验失败, {}", e.getMessage());
-            throw new LicenseException("证书校验失败");
+            logger.error("证书校验不通过, {}", e.getMessage());
+            throw new LicenseException("证书校验不通过, 请检查证书是否合法");
         }
     }
 

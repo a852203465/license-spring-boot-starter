@@ -26,6 +26,7 @@
     <modules>
         <module>license-core-spring-boot-starter</module>
         <module>license-creator-spring-boot-starter</module>
+        <module>license-verify-spring-boot-starter</module>
     </modules>
 
     <properties>
