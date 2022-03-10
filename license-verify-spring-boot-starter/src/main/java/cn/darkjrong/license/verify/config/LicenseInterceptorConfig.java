@@ -13,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author Rong.Jia
  * @date 2022/03/10
  */
+@Configuration
 public class LicenseInterceptorConfig implements WebMvcConfigurer {
 
     @Bean
