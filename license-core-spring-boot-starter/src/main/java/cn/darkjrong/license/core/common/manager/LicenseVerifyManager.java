@@ -66,11 +66,8 @@ public class LicenseVerifyManager {
 
             // 如果之前安装过证书，先卸载之前的证书 == 给null
             licenseManager.uninstall();
-        }catch (Exception e){
-            logger.error("证书卸载异常 {}", e.getMessage());
-        }
+        }catch (Exception ignored){}
     }
-
 
     /**
      * 校验License证书
