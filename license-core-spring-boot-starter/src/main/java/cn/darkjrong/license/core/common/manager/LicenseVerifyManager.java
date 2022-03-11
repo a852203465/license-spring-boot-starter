@@ -34,9 +34,6 @@ public class LicenseVerifyManager {
             // 初始化License证书参数
             LicenseParam licenseParam = ParamInitUtils.initLicenseParam(param);
 
-            // 创建License证书管理器对象
-//          LicenseManager licenseManager =new LicenseManager(licenseParam);
-
             //走自定义的Lic管理
             LicenseCustomManager licenseManager = new LicenseCustomManager(licenseParam);
 
@@ -53,6 +50,27 @@ public class LicenseVerifyManager {
             throw new LicenseException("证书安装异常", e);
         }
     }
+
+    /**
+     * 卸载证书
+     *
+     * @param param License校验类需要的参数
+     */
+    public static synchronized void uninstall(LicenseVerifyParam param) {
+        try{
+            // 初始化License证书参数
+            LicenseParam licenseParam = ParamInitUtils.initLicenseParam(param);
+
+            //走自定义的Lic管理
+            LicenseCustomManager licenseManager = new LicenseCustomManager(licenseParam);
+
+            // 如果之前安装过证书，先卸载之前的证书 == 给null
+            licenseManager.uninstall();
+        }catch (Exception e){
+            logger.error("证书卸载异常 {}", e.getMessage());
+        }
+    }
+
 
     /**
      * 校验License证书

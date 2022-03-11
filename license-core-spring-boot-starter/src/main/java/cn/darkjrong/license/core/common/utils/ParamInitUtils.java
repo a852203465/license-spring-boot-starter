@@ -6,6 +6,7 @@ import cn.darkjrong.license.core.common.manager.LicenseVerifyManager;
 import de.schlichtherle.license.*;
 
 import javax.security.auth.x500.X500Principal;
+import java.util.Date;
 import java.util.prefs.Preferences;
 
 
@@ -30,7 +31,7 @@ public class ParamInitUtils {
      */
     public static LicenseParam initLicenseParam(LicenseCreatorParam param) {
         Preferences preferences = Preferences.userNodeForPackage(LicenseCreator.class);
-        /** 设置对证书内容加密的秘钥 */
+        // 设置对证书内容加密的秘钥
         CipherParam cipherParam = new DefaultCipherParam(param.getStorePass());
         KeyStoreParam privateStoreParam = new DefaultKeyStoreParam(LicenseCreator.class
                 , param.getPrivateKeysStorePath()
@@ -50,22 +51,22 @@ public class ParamInitUtils {
         LicenseContent licenseContent = new LicenseContent();
         licenseContent.setHolder(DEFAULT_HOLDER_AND_ISSUER);
         licenseContent.setIssuer(DEFAULT_HOLDER_AND_ISSUER);
-        /** 设置证书名称 */
+        // 设置证书名称
         licenseContent.setSubject(param.getSubject());
-        /** 设置证书有效期 */
-        licenseContent.setIssued(param.getIssuedTime());
-        /** 设置证书生效日期 */
-        licenseContent.setNotBefore(param.getIssuedTime());
-        /** 设置证书失效日期 */
+        // 设置证书有效期
+        licenseContent.setIssued(new Date());
+        // 设置证书生效日期
+        licenseContent.setNotBefore(new Date());
+        // 设置证书失效日期
         licenseContent.setNotAfter(param.getExpiryTime());
-        /** 设置证书用户类型 */
-        licenseContent.setConsumerType(param.getConsumerType());
-        /** 设置证书用户数量 */
-        licenseContent.setConsumerAmount(param.getConsumerAmount());
-        /** 设置证书描述信息 */
+        // 设置证书用户类型
+        licenseContent.setConsumerType("user");
+        // 设置证书用户数量
+        licenseContent.setConsumerAmount(1);
+        // 设置证书描述信息
         licenseContent.setInfo(param.getDescription());
-        /** 设置证书扩展信息（对象 -- 额外的ip、mac、cpu等信息） */
-        licenseContent.setExtra(param.getLicenseCheck());
+        // 设置证书扩展信息（对象 -- 额外的ip、mac、cpu等信息）
+        licenseContent.setExtra(param.getAppCode());
         return licenseContent;
     }
 

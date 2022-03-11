@@ -48,21 +48,10 @@ public class LicenseCreatorParam implements Serializable {
     private String licensePath;
 
     /**
-     * 证书生效时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date issuedTime = new Date();
-
-    /**
      * 证书失效时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date expiryTime;
-
-    /**
-     * 用户类型
-     */
-    private String consumerType = "user";
 
     /**
      * 用户数量
@@ -75,9 +64,9 @@ public class LicenseCreatorParam implements Serializable {
     private String description = "系统软件许可证书";
 
     /**
-     * 额外的服务器硬件校验信息
+     * 申请码
      */
-    private LicenseExtraParam licenseCheck;
+    private String appCode;
 
 
 

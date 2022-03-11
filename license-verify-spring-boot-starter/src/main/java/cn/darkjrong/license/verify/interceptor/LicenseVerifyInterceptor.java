@@ -2,8 +2,10 @@ package cn.darkjrong.license.verify.interceptor;
 
 import cn.darkjrong.license.core.common.domain.LicenseExtraParam;
 import cn.darkjrong.license.core.common.manager.LicenseVerifyManager;
+import cn.darkjrong.license.core.common.utils.EncryptionUtils;
 import cn.darkjrong.license.verify.listener.VerifyListener;
 import cn.darkjrong.spring.boot.autoconfigure.LicenseVerifyProperties;
+import cn.hutool.core.convert.Convert;
 import de.schlichtherle.license.LicenseContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +37,7 @@ public class LicenseVerifyInterceptor implements HandlerInterceptor {
 
             // 校验证书是否有效
             LicenseContent content = LicenseVerifyManager.verify(licenseVerifyProperties.getVerifyParam());
-            LicenseExtraParam licenseCheck = (LicenseExtraParam) content.getExtra();
+            LicenseExtraParam licenseCheck = EncryptionUtils.decode(Convert.toStr(content.getExtra()), LicenseExtraParam.class);
 
             // 增加业务系统监听，是否自定义验证
             List<VerifyListener> customListenerList = VerifyListener.getListenerList();

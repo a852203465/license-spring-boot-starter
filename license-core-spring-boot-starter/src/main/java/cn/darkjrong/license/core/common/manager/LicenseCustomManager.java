@@ -1,8 +1,10 @@
 package cn.darkjrong.license.core.common.manager;
 
 import cn.darkjrong.license.core.common.domain.LicenseExtraParam;
+import cn.darkjrong.license.core.common.utils.EncryptionUtils;
 import cn.darkjrong.license.core.common.utils.ServerInfoUtils;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
@@ -64,7 +66,7 @@ public class LicenseCustomManager extends LicenseManager {
         final GenericCertificate certificate = getPrivacyGuard().key2cert(key);
         notary.verify(certificate);
         final LicenseContent licenseContent = (LicenseContent) this.load(certificate.getEncoded());
-        /** 增加额外的自己的license校验方法，校验ip、mac、cpu序列号等 */
+        // 增加额外的自己的license校验方法，校验ip、mac、cpu序列号等
         this.validate(licenseContent);
         setLicenseKey(key);
         setCertificate(certificate);
@@ -147,31 +149,31 @@ public class LicenseCustomManager extends LicenseManager {
         super.validate(content);
 
         //2、 然后校验自定义的License参数 License中可被允许的参数信息
-        LicenseExtraParam expectedCheck = (LicenseExtraParam) content.getExtra();
+        LicenseExtraParam expectedCheck = EncryptionUtils.decode(Convert.toStr(content.getExtra()), LicenseExtraParam.class);
 
         //当前服务器真实的参数信息
         LicenseExtraParam serverCheckModel = ServerInfoUtils.getServerInfos();
         if (expectedCheck != null) {
             //校验IP地址
-            if (expectedCheck.getIpCheck() && !checkIpAddress(expectedCheck.getIpAddress(), serverCheckModel.getIpAddress())) {
+            if (!checkIpAddress(expectedCheck.getIpAddress(), serverCheckModel.getIpAddress())) {
                 String message = "系统证书无效，当前服务器的IP没在授权范围内";
                 logger.error(message);
                 throw new LicenseContentException(message);
             }
             //校验Mac地址
-            if (expectedCheck.getMacCheck() && !checkIpAddress(expectedCheck.getMacAddress(), serverCheckModel.getMacAddress())) {
+            if (!checkIpAddress(expectedCheck.getMacAddress(), serverCheckModel.getMacAddress())) {
                 String message = "系统证书无效，当前服务器的Mac地址没在授权范围内";
                 logger.error(message);
                 throw new LicenseContentException(message);
             }
             //校验主板序列号
-            if (expectedCheck.getBoardCheck() && !checkSerial(expectedCheck.getMainBoardSerial(), serverCheckModel.getMainBoardSerial())) {
+            if (!checkSerial(expectedCheck.getMainBoardSerial(), serverCheckModel.getMainBoardSerial())) {
                 String message = "系统证书无效，当前服务器的主板序列号没在授权范围内";
                 logger.error(message);
                 throw new LicenseContentException(message);
             }
             //校验CPU序列号
-            if (expectedCheck.getCpuCheck() && !checkSerial(expectedCheck.getCpuSerial(), serverCheckModel.getCpuSerial())) {
+            if (!checkSerial(expectedCheck.getCpuSerial(), serverCheckModel.getCpuSerial())) {
                 String message = "系统证书无效，当前服务器的CPU序列号没在授权范围内";
                 logger.error(message);
                 throw new LicenseContentException(message);

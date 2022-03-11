@@ -8,7 +8,7 @@
         <dependency>
             <groupId>cn.darkjrong</groupId>
             <artifactId>license-core-spring-boot-starter</artifactId>
-            <version>${project.parent.version}</version>
+            <version>1.0</version>
         </dependency>
 
 		<!-- 软件证书生成模块，负责拉取服务器硬件信息和生成、下载lic证书文件 -->
@@ -50,13 +50,9 @@ keytool -import -alias publiccert -file certfile.cer -keystore publicCerts.store
 
 ### 3 License API 说明
 
-#### 3.1 获取服务硬件信息
+#### 3.1 获取申请码
 
-​	部署人员通过该接口，可以获取到系统所在的部署目标服务器（集群）的硬件信息，通过将该信息提供给开发或市场人员，可以由开发或市场人员根据实际情况进行相应的lic的注册
-
-
-
-- URL: http://ip:port/license/getServerInfos
+- URL: http://ip:port/license/getAppCode
 
 - Method: GET 	
 
@@ -68,41 +64,13 @@ keytool -import -alias publiccert -file certfile.cer -keystore publicCerts.store
   {
       "code": 0,
       "message": "成功",
-      "data": {
-          "ipAddress": [ 
-              "192.168.92.1",
-              "192.168.42.1",
-              "10.20.249.112"
-          ],
-          "macAddress": [ 
-              "00-50-56-C0-00-01",
-              "00-50-56-C0-00-08",
-              "F0-9E-4A-2A-4E-69"
-          ],
-          "cpuSerial": "BFEBFBFF000806C1", 
-          "mainBoardSerial": "/367QR93/CNWSC0015B0M1P/",  
-          "registerAmount": 1,
-          "boardCheck": false,
-          "cpuCheck": false,
-          "registerCheck": false,
-          "macCheck": false,
-          "ipCheck": false
-      }
+      "data": "edb7859d4d9fb2f4719c1d89ef9fbf25994e5a60d35be20eb92d25d6d98613963b67f8281ec64ad16d5872569e461671dcf6e8c04c5c6f47d597fc96dfa8dcdbeabeeeec49834575d4e4026403e6f794ababfaa5852e7737d6ede60c7f4a6b5c3027198f424e9e40538567b41a70e7a7c5be8be60f4b671d27b840734d1ff6fd08771a81c8470f93747233b68597f9475be57b4dcd0087f23cba53c9825921f3dd53202f799c7b14919d229230879c6223abf434e9a0bdeb8148ce66549bc882f8da53f86e956cbbf29ddc71481fb576cb93847968fedcdb094811f5129a4072f85d05a6b19860e8ac2bc7b82c447afb"
   }
   ```
-
-- | 字段            | 类型    | 描述                            |
-  | --------------- | ------- | ------------------------------- |
-  | ipAddress       | List    | 服务器IP地址信息                |
-  | macAddress      | List    | 服务器MAC地址信息               |
-  | cpuSerial       | String  | 服务器CPU序列号                 |
-  | mainBoardSerial | String  | 主板序列号                      |
-  | boardCheck      | boolean | 是否认证主板号                  |
-  | cpuCheck        | boolean | 是否认证cpu序列号               |
-  | registerCheck   | boolean | 是否限制注册人数                |
-  | macCheck        | boolean | 是否认证mac                     |
-  | ipCheck         | boolean | 是否认证ip                      |
-  | registerAmount  | Long    | 限制系统中可注册的人数, 默认：1 |
+  
+- | 字段 | 类型   | 描述   |
+  | ---- | ------ | ------ |
+  | data | String | 申请码 |
 
 #### 3.2 生成许可证文件
 
@@ -112,30 +80,18 @@ keytool -import -alias publiccert -file certfile.cer -keystore publicCerts.store
 
 - 入参：
 
-  | 字段            | 类型   | 是否必传 | 描述                                 |
-  | --------------- | ------ | -------- | ------------------------------------ |
-  | subject         | String | 是       | 证书名称                             |
-  | privateAlias    | String | 是       | 私钥别名                             |
-  | keyPass         | String | 是       | 私钥密码                             |
-  | storePass       | String | 是       | 私钥库密码                           |
-  | licensePath     | String | 否       | 证书生成地址                         |
-  | issuedTime      | String | 是       | 授权日期                             |
-  | expiryTime      | String | 是       | 证书失效日期                         |
-  | consumerType    | String | 否       | 授权用户类型，默认：user             |
-  | consumerAmount  | int    | 否       | 授权用户数量， 默认：1               |
-  | description     | String | 否       | 证书描述信息                         |
-  | licenseCheck    | Object | 否       | 证书额外验证信息对象                 |
-  | ipCheck         | bool   | 否       | 是否验证ip地址列表，非空             |
-  | ipAddress       | List   | 否       | 可被允许的ip地址列表                 |
-  | macCheck        | bool   | 否       | 是否验证mac地址列表                  |
-  | macAddress      | List   | 否       | 可被允许的mac地址列表                |
-  | cpuCheck        | bool   | 否       | 是否验证cpu序列号                    |
-  | cpuSerial       | String | 否       | 可被允许的cpu序列号                  |
-  | boardCheck      | bool   | 否       | 是否验证主板号                       |
-  | mainBoardSerial | String | 否       | 可被允许的主板序列号                 |
-  | registerCheck   | bool   | 否       | 是否验证注册人数                     |
-  | registerAmount  | Long   | 否       | 可被允许的最大注册人数限制， 默认：1 |
-
+  | 字段           | 类型   | 是否必传 | 描述                   |
+  | -------------- | ------ | -------- | ---------------------- |
+  | subject        | String | 是       | 证书名称               |
+  | privateAlias   | String | 是       | 私钥别名               |
+  | keyPass        | String | 是       | 私钥密码               |
+  | storePass      | String | 是       | 私钥库密码             |
+  | licensePath    | String | 否       | 证书生成地址           |
+  | expiryTime     | String | 是       | 证书失效日期           |
+  | consumerAmount | int    | 否       | 授权用户数量， 默认：1 |
+  | description    | String | 否       | 证书描述信息           |
+  | appCode        | String | 是       | 申请码                 |
+  
   ```json
   {
       "subject": "landi",
@@ -143,32 +99,12 @@ keytool -import -alias publiccert -file certfile.cer -keystore publicCerts.store
       "keyPass": "123456a",
       "storePass": "123456a",
       "privateKeysStorePath": "/privateKeys.store",
-      "issuedTime": "2022-03-10 17:30:00",
       "expiryTime": "2022-04-01 08:30:00",
       "description": "系统软件许可证书",
-      "licenseCheck": {
-          "ipAddress": [
-              "192.168.92.1",
-              "192.168.42.1",
-              "10.20.249.112"
-          ],
-          "macAddress": [
-              "00-50-56-C0-00-01",
-              "00-50-56-C0-00-08",
-              "F0-9E-4A-2A-4E-69"
-          ],
-          "cpuSerial": "BFEBFBFF000806C1",
-          "mainBoardSerial": "/367QR93/CNWSC0015B0M1P/",
-          "registerAmount": 1000,
-          "macCheck": false,
-          "boardCheck": false,
-          "cpuCheck": false,
-          "ipCheck": false,
-          "registerCheck": true
-      }
+      "appCode": "edb7859d4d9fb2f4719c1d89ef9fbf25994e5a60d35be20eb92d25d6d98613963b67f8281ec64ad16d5872569e461671dcf6e8c04c5c6f47d597fc96dfa8dcdbeabeeeec49834575d4e4026403e6f794ababfaa5852e7737d6ede60c7f4a6b5c3027198f424e9e40538567b41a70e7a7c5be8be60f4b671d27b840734d1ff6fd08771a81c8470f93747233b68597f9475be57b4dcd0087f23cba53c9825921f3dd53202f799c7b14919d229230879c6223abf434e9a0bdeb8148ce66549bc882f8da53f86e956cbbf29ddc71481fb576cb93847968fedcdb094811f5129a4072f85d05a6b19860e8ac2bc7b82c447afb"
   }
   ```
-
+  
 - 返回值
 
   ```json
@@ -206,7 +142,6 @@ keytool -import -alias publiccert -file certfile.cer -keystore publicCerts.store
 ```yaml
 license:
   verify:
-    enabled: true  # 是否开启认证，必须为true, 否则不会验证license
     subject: landi # 证书名称
     public-alias: publiccert # 公钥别名
     public-keys-store-path: /publicCerts.store  # 公钥库所在的位置，默认：/publicCerts.store

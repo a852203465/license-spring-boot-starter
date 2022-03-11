@@ -5,6 +5,7 @@ import cn.darkjrong.license.core.common.utils.FileUtils;
 import cn.darkjrong.license.verify.quartz.QuartzTask;
 import cn.darkjrong.license.verify.quartz.QuartzUtils;
 import cn.darkjrong.spring.boot.autoconfigure.LicenseVerifyProperties;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import org.quartz.JobExecutionContext;
 import org.quartz.Scheduler;
@@ -39,27 +40,29 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
      * 文件唯一身份标识 == 相当于人类的指纹一样
      */
     private final AtomicReference<String> md5 = new AtomicReference<>(StrUtil.EMPTY);
-    private static boolean isLoad = false;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (StrUtil.isNotEmpty(licenseVerifyProperties.getLicensePath())) {
             install();
-            String readMd5 = FileUtils.getMd5(licenseVerifyProperties.getLicensePath());
-
-            QuartzTask quartzTask = QuartzTask.builder()
-                    .jobName("LicenseListenerTask")
-                    .cronExpression("0/5 * * * * ?")
-                    .jobClass(LicenseListenerTask.class)
-                    .build();
-
-            QuartzUtils.createScheduleJob(scheduler, quartzTask);
-            if (StrUtil.isBlank(md5.get())) {
-                md5.set(readMd5);
+            if (FileUtil.exist(licenseVerifyProperties.getLicensePath())) {
+                String readMd5 = FileUtils.getMd5(licenseVerifyProperties.getLicensePath());
+                if (StrUtil.isBlank(md5.get())) {
+                    md5.set(readMd5);
+                }
             }
         }else {
             logger.warn("No license file detected, please provide");
         }
+
+        QuartzTask quartzTask = QuartzTask.builder()
+                .jobName("LicenseListenerTask")
+                .cronExpression("0/5 * * * * ?")
+                .jobClass(LicenseListenerTask.class)
+                .build();
+
+        QuartzUtils.createScheduleJob(scheduler, quartzTask);
+
     }
 
     /**
@@ -89,11 +92,13 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
         @Override
         protected void executeInternal(JobExecutionContext context) {
 
-            String readMd5 = FileUtils.getMd5(licenseVerifyProperties.getLicensePath());
-            // 不相等，说明lic变化了
-            if (!StrUtil.equals(md5.get(), readMd5)) {
-                install();
-                md5.set(readMd5);
+            if (FileUtil.exist(licenseVerifyProperties.getLicensePath())) {
+                String readMd5 = FileUtils.getMd5(licenseVerifyProperties.getLicensePath());
+                // 不相等，说明lic变化了
+                if (!StrUtil.equals(md5.get(), readMd5)) {
+                    install();
+                    md5.set(readMd5);
+                }
             }
         }
     }

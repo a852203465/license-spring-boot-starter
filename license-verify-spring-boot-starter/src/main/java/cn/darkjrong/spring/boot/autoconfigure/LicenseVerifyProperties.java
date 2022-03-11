@@ -14,11 +14,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class LicenseVerifyProperties {
 
     /**
-     * 是否开启验证
-     */
-    private boolean enabled;
-
-    /**
      *  主题
      */
     private String subject;

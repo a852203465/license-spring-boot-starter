@@ -1,7 +1,7 @@
 package cn.darkjrong.license.core.controller;
 
-import cn.darkjrong.license.core.common.domain.LicenseExtraParam;
 import cn.darkjrong.license.core.common.domain.ResponseVO;
+import cn.darkjrong.license.core.common.utils.EncryptionUtils;
 import cn.darkjrong.license.core.common.utils.ServerInfoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,20 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/license")
-public class HardWareInfoController {
+public class AppCodeController {
 
-    private static final Logger logger = LoggerFactory.getLogger(HardWareInfoController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AppCodeController.class);
 
     /**
-     * 获取服务器信息
+     * 获取申请码
      *
-     * @return {@link ResponseVO}<{@link LicenseExtraParam}>
+     * @return {@link ResponseVO}<{@link String}>
      */
-    @GetMapping(value = "/getServerInfos",produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseVO<LicenseExtraParam> getServerInfos() {
-
-        logger.info("getServerInfos {}", System.currentTimeMillis());
-
-        return ResponseVO.success(ServerInfoUtils.getServerInfos());
+    @GetMapping(value = "/getAppCode",produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseVO<String> getApplicationCode() {
+        return ResponseVO.success(EncryptionUtils.encode(ServerInfoUtils.getServerInfos()));
     }
+
 }
