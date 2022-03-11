@@ -1,6 +1,8 @@
 package cn.darkjrong.license.core.common.utils;
 
 import cn.hutool.core.util.StrUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -13,6 +15,8 @@ import java.util.Scanner;
  * @date 2022/03/10
  */
 public class ServerSerialUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(ServerSerialUtils.class);
 
     /**
      * 执行Linux的shell获取Linux信息

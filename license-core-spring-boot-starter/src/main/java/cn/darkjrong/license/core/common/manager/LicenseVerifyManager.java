@@ -3,17 +3,15 @@ package cn.darkjrong.license.core.common.manager;
 import cn.darkjrong.license.core.common.domain.LicenseVerifyParam;
 import cn.darkjrong.license.core.common.exceptions.LicenseException;
 import cn.darkjrong.license.core.common.utils.ParamInitUtils;
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.DateUtil;
-import de.schlichtherle.license.*;
+import de.schlichtherle.license.LicenseContent;
+import de.schlichtherle.license.LicenseManager;
+import de.schlichtherle.license.LicenseParam;
+import de.schlichtherle.license.NoLicenseInstalledException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
 
 
 /**
@@ -31,7 +29,7 @@ public class LicenseVerifyManager {
      * @param param License校验类需要的参数
      * @return {@link LicenseContent}
      */
-    public synchronized LicenseContent install(LicenseVerifyParam param){
+    public static synchronized LicenseContent install(LicenseVerifyParam param){
         try{
             // 初始化License证书参数
             LicenseParam licenseParam = ParamInitUtils.initLicenseParam(param);
@@ -49,18 +47,10 @@ public class LicenseVerifyManager {
             licenseManager.uninstall();
 
             // 开始安装
-            LicenseContent content = licenseManager.install(licenseFile);
-
-            String message = MessageFormat.format("证书安装成功，证书有效期：{0} - {1}",
-                    DateUtil.format(content.getNotBefore(), DatePattern.NORM_DATETIME_FORMAT),
-                    DateUtil.format(content.getNotAfter(), DatePattern.NORM_DATETIME_FORMAT));
-
-            logger.info(message);
-
-            return content;
+            return licenseManager.install(licenseFile);
         }catch (Exception e){
-            logger.error("证书安装异常, {}", e.getMessage());
-            throw new LicenseException("证书安装异常");
+            logger.error("证书安装异常 {}", e.getMessage());
+            throw new LicenseException("证书安装异常", e);
         }
     }
 
@@ -70,7 +60,7 @@ public class LicenseVerifyManager {
      * @param param License校验类需要的参数
      * @return {@link LicenseContent}
      */
-    public LicenseContent verify(LicenseVerifyParam param){
+    public static LicenseContent verify(LicenseVerifyParam param){
 
         // 初始化License证书参数
         LicenseParam licenseParam = ParamInitUtils.initLicenseParam(param);
@@ -80,20 +70,13 @@ public class LicenseVerifyManager {
 
         // 开始校验证书
         try {
-            LicenseContent licenseContent = licenseManager.verify();
-
-            String message = MessageFormat.format("证书校验通过，证书有效期：{0} - {1}",
-                    DateUtil.format(licenseContent.getNotBefore(), DatePattern.NORM_DATETIME_FORMAT),
-                    DateUtil.format(licenseContent.getNotAfter(), DatePattern.NORM_DATETIME_FORMAT));
-            logger.info(message);
-
-            return licenseContent;
+            return licenseManager.verify();
         }catch (NoLicenseInstalledException ex){
-            logger.error("证书未安装!, {}", ex.getMessage());
-            throw new LicenseException("证书未安装, 请检查证书");
+            logger.error("证书未安装! {}", ex.getMessage());
+            throw new LicenseException("证书未安装, 请检查证书", ex);
         } catch (Exception e){
-            logger.error("证书校验不通过, {}", e.getMessage());
-            throw new LicenseException("证书校验不通过, 请检查证书是否合法");
+            logger.error("证书校验不通过 {}", e.getMessage());
+            throw new LicenseException("证书校验不通过, 请检查证书是否合法", e);
         }
     }
 

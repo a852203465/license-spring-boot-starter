@@ -17,7 +17,7 @@ public enum ResponseEnum {
     SUCCESS(0, "成功"),
 
     // 失败
-    ERROR(4001, "失败"),
+    ERROR(500, "失败"),
 
 
 

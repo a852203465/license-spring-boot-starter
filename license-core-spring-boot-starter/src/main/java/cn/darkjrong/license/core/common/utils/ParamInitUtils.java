@@ -78,11 +78,11 @@ public class ParamInitUtils {
         Preferences preferences = Preferences.userNodeForPackage(LicenseVerifyManager.class);
         CipherParam cipherParam = new DefaultCipherParam(param.getStorePass());
         KeyStoreParam publicStoreParam = new DefaultKeyStoreParam(LicenseVerifyManager.class
-                /** 公钥库存储路径 */
+                // 公钥库存储路径
                 , param.getPublicKeysStorePath()
-                /** 公匙别名 */
+                // 公匙别名
                 , param.getPublicAlias()
-                /** 公钥库访问密码 */
+                // 公钥库访问密码
                 , param.getStorePass()
                 , null);
         return new DefaultLicenseParam(param.getSubject(), preferences, publicStoreParam, cipherParam);

@@ -3,7 +3,6 @@ package cn.darkjrong.spring.boot.autoconfigure;
 import cn.darkjrong.license.core.common.domain.LicenseVerifyParam;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * License验证属性
@@ -42,7 +41,7 @@ public class LicenseVerifyProperties {
     /**
      *  许可证文件路径
      */
-    private String licensePath;
+    private String licensePath = "classpath:license.lic";
 
     public LicenseVerifyParam getVerifyParam() {
         LicenseVerifyParam param = new LicenseVerifyParam();

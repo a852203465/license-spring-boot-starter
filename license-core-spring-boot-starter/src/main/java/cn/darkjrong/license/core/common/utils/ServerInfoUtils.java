@@ -3,8 +3,8 @@ package cn.darkjrong.license.core.common.utils;
 import cn.darkjrong.license.core.common.domain.LicenseExtraParam;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -222,7 +222,7 @@ public class ServerInfoUtils {
         } catch (Exception e) {
             logger.error("获取Window主板信息错误 {}", e.getMessage());
         }finally {
-            IOUtils.close(input);
+            IoUtil.close(input);
             try {
                 FileUtil.del(file);
             }catch (Exception ignored) {}

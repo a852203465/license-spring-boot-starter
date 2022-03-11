@@ -1,8 +1,6 @@
 package cn.darkjrong.license.core.common.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,7 +13,6 @@ import java.util.Date;
  * @date 2022/03/10
  */
 @Data
-@ApiModel("License生成参数")
 public class LicenseCreatorParam implements Serializable {
 
     private static final long serialVersionUID = -7793154252684580872L;
@@ -23,13 +20,12 @@ public class LicenseCreatorParam implements Serializable {
     /**
      * 证书主题
      */
-    @ApiModelProperty(value = "证书主题")
     private String subject;
 
     /**
      * 私钥别名
      */
-    private String privateAlias;
+    private String privateAlias = "privateKeys";
 
     /**
      * 私钥密码（需要妥善保管，不能让使用者知道
@@ -39,7 +35,7 @@ public class LicenseCreatorParam implements Serializable {
     /**
      * 私钥库存储路径
      */
-    private String privateKeysStorePath;
+    private String privateKeysStorePath = "/privateKeys.store";
 
     /**
      * 访问私钥库的密码
@@ -76,7 +72,7 @@ public class LicenseCreatorParam implements Serializable {
     /**
      * 描述信息
      */
-    private String description = "";
+    private String description = "系统软件许可证书";
 
     /**
      * 额外的服务器硬件校验信息

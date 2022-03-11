@@ -23,7 +23,7 @@ public class LicenseExtraParam implements Serializable {
     /**
      * 是否认证ip
      */
-    private boolean isIpCheck;
+    private Boolean ipCheck = Boolean.FALSE;
 
     /**
      * 可被允许的IP地址
@@ -33,7 +33,7 @@ public class LicenseExtraParam implements Serializable {
     /**
      * 是否认证mac
      */
-    private boolean isMacCheck;
+    private Boolean macCheck = Boolean.FALSE;
 
     /**
      * 可被允许的mac地址
@@ -43,7 +43,7 @@ public class LicenseExtraParam implements Serializable {
     /**
      * 是否认证cpu序列号
      */
-    private boolean isCpuCheck;
+    private Boolean cpuCheck = Boolean.FALSE;
 
     /**
      * 可被允许的CPU序列号
@@ -53,7 +53,7 @@ public class LicenseExtraParam implements Serializable {
     /**
      * 是否认证主板号
      */
-    private boolean isBoardCheck;
+    private Boolean boardCheck = Boolean.FALSE;
 
     /**
      * 可被允许的主板序列号
@@ -63,12 +63,12 @@ public class LicenseExtraParam implements Serializable {
     /**
      * 是否限制注册人数
      */
-    private boolean isRegisterCheck;
+    private Boolean registerCheck = Boolean.FALSE;
 
     /**
      * 限制系统中可注册的人数
      */
-    private Long registerAmount;
+    private Long registerAmount = 1L;
 
 
 }

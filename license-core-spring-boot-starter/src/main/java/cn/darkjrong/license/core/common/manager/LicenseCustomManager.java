@@ -166,25 +166,25 @@ public class LicenseCustomManager extends LicenseManager {
         LicenseExtraParam serverCheckModel = ServerInfoUtils.getServerInfos();
         if (expectedCheck != null) {
             //校验IP地址
-            if (expectedCheck.isIpCheck() && !checkIpAddress(expectedCheck.getIpAddress(), serverCheckModel.getIpAddress())) {
+            if (expectedCheck.getIpCheck() && !checkIpAddress(expectedCheck.getIpAddress(), serverCheckModel.getIpAddress())) {
                 String message = "系统证书无效，当前服务器的IP没在授权范围内";
                 logger.error(message);
                 throw new LicenseContentException(message);
             }
             //校验Mac地址
-            if (expectedCheck.isMacCheck() && !checkIpAddress(expectedCheck.getMacAddress(), serverCheckModel.getMacAddress())) {
+            if (expectedCheck.getMacCheck() && !checkIpAddress(expectedCheck.getMacAddress(), serverCheckModel.getMacAddress())) {
                 String message = "系统证书无效，当前服务器的Mac地址没在授权范围内";
                 logger.error(message);
                 throw new LicenseContentException(message);
             }
             //校验主板序列号
-            if (expectedCheck.isBoardCheck() && !checkSerial(expectedCheck.getMainBoardSerial(), serverCheckModel.getMainBoardSerial())) {
+            if (expectedCheck.getBoardCheck() && !checkSerial(expectedCheck.getMainBoardSerial(), serverCheckModel.getMainBoardSerial())) {
                 String message = "系统证书无效，当前服务器的主板序列号没在授权范围内";
                 logger.error(message);
                 throw new LicenseContentException(message);
             }
             //校验CPU序列号
-            if (expectedCheck.isCpuCheck() && !checkSerial(expectedCheck.getCpuSerial(), serverCheckModel.getCpuSerial())) {
+            if (expectedCheck.getCpuCheck() && !checkSerial(expectedCheck.getCpuSerial(), serverCheckModel.getCpuSerial())) {
                 String message = "系统证书无效，当前服务器的CPU序列号没在授权范围内";
                 logger.error(message);
                 throw new LicenseContentException(message);
@@ -206,7 +206,7 @@ public class LicenseCustomManager extends LicenseManager {
             decoder = new XMLDecoder(new BufferedInputStream(inputStream, DEFAULT_BUFF_SIZE), null, null);
             return decoder.readObject();
         } catch (UnsupportedEncodingException e) {
-            logger.error("load {}", e.getMessage());
+            logger.error("解析XML异常 {}", e.getMessage());
         } finally {
             IoUtil.close(decoder);
             IoUtil.close(inputStream);

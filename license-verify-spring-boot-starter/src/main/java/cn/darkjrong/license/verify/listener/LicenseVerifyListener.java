@@ -1,20 +1,19 @@
 package cn.darkjrong.license.verify.listener;
 
-import cn.darkjrong.license.core.common.exceptions.LicenseException;
 import cn.darkjrong.license.core.common.manager.LicenseVerifyManager;
+import cn.darkjrong.license.core.common.utils.FileUtils;
+import cn.darkjrong.license.verify.quartz.QuartzTask;
+import cn.darkjrong.license.verify.quartz.QuartzUtils;
 import cn.darkjrong.spring.boot.autoconfigure.LicenseVerifyProperties;
-import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.SecureUtil;
-import cn.hutool.crypto.digest.DigestUtil;
-import de.schlichtherle.license.LicenseContent;
+import org.quartz.JobExecutionContext;
+import org.quartz.Scheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -33,6 +32,9 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
     @Autowired
     private LicenseVerifyProperties licenseVerifyProperties;
 
+    @Autowired
+    private Scheduler scheduler;
+
     /**
      * 文件唯一身份标识 == 相当于人类的指纹一样
      */
@@ -43,41 +45,33 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (StrUtil.isNotEmpty(licenseVerifyProperties.getLicensePath())) {
             install();
-            String readMd5 = getMd5(licenseVerifyProperties.getLicensePath());
-            isLoad = true;
+            String readMd5 = FileUtils.getMd5(licenseVerifyProperties.getLicensePath());
+
+            QuartzTask quartzTask = QuartzTask.builder()
+                    .jobName("LicenseListenerTask")
+                    .cronExpression("0/5 * * * * ?")
+                    .jobClass(LicenseListenerTask.class)
+                    .build();
+
+            QuartzUtils.createScheduleJob(scheduler, quartzTask);
             if (StrUtil.isBlank(md5.get())) {
                 md5.set(readMd5);
             }
-        }
-    }
-
-    /**
-     * 5秒检测一次，不能太快也不能太慢
-     */
-    @Scheduled(cron = "0/5 * * * * ?")
-    protected void timer() {
-        if (!isLoad) {
-            return;
-        }
-        String readMd5 = getMd5(licenseVerifyProperties.getLicensePath());
-        // 不相等，说明lic变化了
-        if (!StrUtil.equals(md5.get(), readMd5)) {
-            install();
-            md5.set(readMd5);
+        }else {
+            logger.warn("No license file detected, please provide");
         }
     }
 
     /**
      * 安装证书
      */
-    private void install() {
+    protected void install() {
 
         logger.info("++++++++ 开始安装证书 ++++++++");
 
-        LicenseVerifyManager licenseVerifyManager = new LicenseVerifyManager();
         // 走定义校验证书并安装
         try {
-            LicenseContent licenseContent = licenseVerifyManager.install(licenseVerifyProperties.getVerifyParam());
+            LicenseVerifyManager.install(licenseVerifyProperties.getVerifyParam());
             logger.info("++++++++ 证书安装成功 ++++++++");
         }catch (Exception e) {
             logger.error("++++++++ 证书安装失败 ++++++++");
@@ -85,19 +79,25 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
     }
 
     /**
-     * 获取文件的md5
+     * 许可证侦听器的任务
      *
-     * @param filePath 文件路径
-     * @return {@link String}
+     * @author Rong.Jia
+     * @date 2022/03/11
      */
-    public String getMd5(String filePath) {
+    public class LicenseListenerTask extends QuartzJobBean {
 
-        try {
-            return DigestUtil.md5Hex(ResourceUtil.getStream(filePath));
-        } catch (Exception e) {
-            logger.error("许可证文件不存在 {}", e.getMessage());
-            throw new LicenseException("许可证文件不存在", e);
+        @Override
+        protected void executeInternal(JobExecutionContext context) {
+
+            String readMd5 = FileUtils.getMd5(licenseVerifyProperties.getLicensePath());
+            // 不相等，说明lic变化了
+            if (!StrUtil.equals(md5.get(), readMd5)) {
+                install();
+                md5.set(readMd5);
+            }
         }
     }
+
+
 
 }
