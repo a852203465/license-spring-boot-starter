@@ -39,9 +39,6 @@ public class LicenseCustomManager extends LicenseManager {
      */
     private static final int DEFAULT_BUFF_SIZE = 8 * 1024;
 
-    public LicenseCustomManager() {
-    }
-
     public LicenseCustomManager(LicenseParam param) {
         super(param);
     }
