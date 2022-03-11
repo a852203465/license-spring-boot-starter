@@ -6,6 +6,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import de.schlichtherle.license.*;
 import de.schlichtherle.xml.GenericCertificate;
@@ -13,9 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.beans.XMLDecoder;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
@@ -29,15 +28,6 @@ import java.util.List;
 public class LicenseCustomManager extends LicenseManager {
 
     private static final Logger logger = LoggerFactory.getLogger(LicenseCustomManager.class);
-
-    /**
-     * XML编码
-     */
-    private static final String XML_CHARSET = "UTF-8";
-    /**
-     * 默认BUFF_SIZE
-     */
-    private static final int DEFAULT_BUFF_SIZE = 8 * 1024;
 
     public LicenseCustomManager(LicenseParam param) {
         super(param);
@@ -196,19 +186,16 @@ public class LicenseCustomManager extends LicenseManager {
      * <p>重写XMLDecoder解析XML</p>
      */
     private Object load(String encoded) {
-        BufferedInputStream inputStream = null;
+        ByteArrayInputStream inputStream = null;
         XMLDecoder decoder = null;
         try {
-            inputStream = new BufferedInputStream(new ByteArrayInputStream(encoded.getBytes(XML_CHARSET)));
-            decoder = new XMLDecoder(new BufferedInputStream(inputStream, DEFAULT_BUFF_SIZE), null, null);
+            inputStream = new ByteArrayInputStream(encoded.getBytes(CharsetUtil.CHARSET_UTF_8));
+            decoder = new XMLDecoder(inputStream, null, null);
             return decoder.readObject();
-        } catch (UnsupportedEncodingException e) {
-            logger.error("解析XML异常 {}", e.getMessage());
         } finally {
             IoUtil.close(decoder);
             IoUtil.close(inputStream);
         }
-        return null;
     }
 
     /**
