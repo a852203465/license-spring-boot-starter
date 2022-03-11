@@ -52,12 +52,12 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
                 }
             }
         }else {
-            logger.warn("No license file detected, please provide");
+            logger.warn("未检测到license文件，请提供");
         }
 
         QuartzTask quartzTask = QuartzTask.builder()
                 .jobName("LicenseListenerTask")
-                .cronExpression("0/5 * * * * ?")
+                .cronExpression("0/10 * * * * ?")
                 .jobClass(LicenseListenerTask.class)
                 .build();
 
@@ -91,7 +91,6 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
 
         @Override
         protected void executeInternal(JobExecutionContext context) {
-
             if (FileUtil.exist(licenseVerifyProperties.getLicensePath())) {
                 String readMd5 = FileUtils.getMd5(licenseVerifyProperties.getLicensePath());
                 // 不相等，说明lic变化了

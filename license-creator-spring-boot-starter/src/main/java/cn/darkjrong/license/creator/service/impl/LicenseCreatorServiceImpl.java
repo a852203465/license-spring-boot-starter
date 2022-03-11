@@ -2,6 +2,7 @@ package cn.darkjrong.license.creator.service.impl;
 
 import cn.darkjrong.license.core.common.domain.LicenseCreatorParam;
 import cn.darkjrong.license.core.common.manager.LicenseCreatorManager;
+import cn.darkjrong.license.core.common.utils.FileUtils;
 import cn.darkjrong.license.core.common.utils.ServerInfoUtils;
 import cn.darkjrong.license.creator.service.LicenseCreatorService;
 import cn.hutool.core.date.DatePattern;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.text.MessageFormat;
 import java.util.Date;
 
@@ -31,12 +33,12 @@ public class LicenseCreatorServiceImpl implements LicenseCreatorService {
     public String generateLicense(LicenseCreatorParam param) {
 
         if(StrUtil.isBlank(param.getLicensePath())){
-            String tempPath = StrUtil.replace(ServerInfoUtils.getServerTempPath(), "\\", "/");
+            String tempPath = StrUtil.replace(ServerInfoUtils.getServerTempPath(), File.separator, FileUtils.SEPARATOR);
 
             // 根据时间戳，命名lic文件
-            String licDir = tempPath + "/license/" + DateUtil.format(new Date(), DatePattern.PURE_DATETIME_FORMATTER);
+            String licDir = tempPath + FileUtils.SEPARATOR + FileUtils.LICENSE + FileUtils.SEPARATOR + DateUtil.format(new Date(), DatePattern.PURE_DATETIME_FORMATTER);
             FileUtil.mkdir(licDir);
-            param.setLicensePath(licDir + "/license.lic");
+            param.setLicensePath(licDir + FileUtils.SEPARATOR + FileUtils.LICENSE + FileUtils.LICENSE_SUFFIX);
         }
 
         LicenseContent licenseContent = LicenseCreatorManager.generateLicense(param);
