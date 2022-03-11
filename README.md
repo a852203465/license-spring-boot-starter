@@ -149,7 +149,7 @@ license:
     license-path: G:/workspace-idea/license-demo/license/20220311090429/license.lic # 证书位置， 默认：classpath:license.lic
 ```
 
-内置lic文件变动定时检测功能，如业务系统需要用到，只需要在SpringBoot启动类上，添加@EnableScheduling注解即可
+内置lic文件变动定时检测功能，会自动启动
 
 
 
