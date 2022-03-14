@@ -83,6 +83,18 @@ public class FileUtils {
         throw new LicenseException("未检测到license文件，请提供");
     }
 
+    /**
+     * 删除文件
+     *
+     * @param file 文件
+     */
+    public static void del(File file) {
+        try {
+            FileUtil.del(file);
+        }catch (Exception ignored) {}
+    }
+
+
 
 
 

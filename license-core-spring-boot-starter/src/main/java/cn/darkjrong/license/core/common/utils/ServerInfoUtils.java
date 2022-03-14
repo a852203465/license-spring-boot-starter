@@ -109,10 +109,9 @@ public class ServerInfoUtils {
         String result = StrUtil.EMPTY;
         String cpuIdCmd = "dmidecode";
         BufferedReader bufferedReader = null;
-        Process p = null;
         try {
             // 管道
-            p = Runtime.getRuntime().exec(new String[] { "sh", "-c", cpuIdCmd });
+            Process p = Runtime.getRuntime().exec(new String[] { "sh", "-c", cpuIdCmd });
             bufferedReader = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line = null;
             int index = -1;
@@ -127,6 +126,8 @@ public class ServerInfoUtils {
             }
         } catch (IOException e) {
             logger.error("获取Linux cpu信息错误 {}", e.getMessage());
+        }finally {
+            IoUtil.close(bufferedReader);
         }
         return result.trim();
     }
@@ -140,6 +141,7 @@ public class ServerInfoUtils {
 
         String result = StrUtil.EMPTY;
         File file = null;
+        BufferedReader input = null;
         try {
             file = File.createTempFile("tmp", ".vbs");
             file.deleteOnExit();
@@ -151,19 +153,18 @@ public class ServerInfoUtils {
 
             fw.write(vbs);
             fw.close();
+
             Process p = Runtime.getRuntime().exec("cscript //NoLogo " + file.getPath());
-            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line;
             while ((line = input.readLine()) != null) {
                 result += line;
             }
-            input.close();
         } catch (Exception e) {
             logger.error("获取window cpu信息错误, {}", e.getMessage());
         }finally {
-            try {
-                FileUtil.del(file);
-            }catch (Exception ignored){}
+            IoUtil.close(input);
+            FileUtils.del(file);
         }
         return result.trim();
     }
@@ -176,18 +177,19 @@ public class ServerInfoUtils {
     private static String getLinuxMainBoardSerial() {
         String result = StrUtil.EMPTY;
         String maniBordCmd = "dmidecode | grep 'Serial Number' | awk '{print $3}' | tail -1";
-        Process p;
+        BufferedReader br = null;
         try {
-            p = Runtime.getRuntime().exec(new String[] { "sh", "-c", maniBordCmd });
-            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            Process p = Runtime.getRuntime().exec(new String[] { "sh", "-c", maniBordCmd });
+            br = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line;
             while ((line = br.readLine()) != null) {
                 result += line;
                 break;
             }
-            br.close();
         } catch (IOException e) {
             logger.error("获取Linux主板信息错误 {}", e.getMessage());
+        }finally {
+            IoUtil.close(br);
         }
         return  result;
     }
@@ -223,9 +225,7 @@ public class ServerInfoUtils {
             logger.error("获取Window主板信息错误 {}", e.getMessage());
         }finally {
             IoUtil.close(input);
-            try {
-                FileUtil.del(file);
-            }catch (Exception ignored) {}
+            FileUtils.del(file);
         }
         return result.trim();
     }
