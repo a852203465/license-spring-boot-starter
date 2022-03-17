@@ -24,10 +24,7 @@
             <groupId>de.schlichtherle.truelicense</groupId>
             <artifactId>truelicense-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-        </dependency>
+
     </dependencies>
 
 

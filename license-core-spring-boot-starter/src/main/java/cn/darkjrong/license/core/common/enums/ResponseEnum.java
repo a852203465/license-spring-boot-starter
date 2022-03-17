@@ -19,9 +19,10 @@ public enum ResponseEnum {
     // 失败
     ERROR(500, "失败"),
 
+    // 参数不正确
+    PARAMETER_ERROR(1, "参数不正确"),
 
-
-
+    NOT_FOUND(404, "请求接口不存在"),
 
 
 

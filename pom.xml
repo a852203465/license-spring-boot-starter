@@ -82,6 +82,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.7.21</version>
+        </dependency>
 
     </dependencies>
 
@@ -101,11 +106,7 @@
                 <version>1.33</version>
             </dependency>
 
-            <dependency>
-                <groupId>cn.hutool</groupId>
-                <artifactId>hutool-all</artifactId>
-                <version>5.7.21</version>
-            </dependency>
+
 
         </dependencies>
     </dependencyManagement>

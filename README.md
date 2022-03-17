@@ -121,7 +121,7 @@ keytool -import -alias publiccert -file certfile.cer -keystore publicCerts.store
 
 #### 3.3 下载许可证
 
- - URL: http://ip:port/license/generate?path=G:/workspace-idea/license-demo/license/20220311101806/license.lic
+ - URL: http://ip:port/license/download?path=G:/workspace-idea/license-demo/license/20220311101806/license.lic
 
  - Method: GET
 

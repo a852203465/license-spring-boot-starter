@@ -3,6 +3,8 @@ package cn.darkjrong.license.core.common.utils;
 import cn.darkjrong.license.core.common.exceptions.LicenseException;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.CharUtil;
 import cn.hutool.core.util.StrUtil;
@@ -11,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +31,18 @@ public class FileUtils {
     public static final String LICENSE_FORMAT = "lic";
     public static final String LICENSE_SUFFIX = "." + LICENSE_FORMAT;
     public static final String SEPARATOR = "/";
+    public static final String KEY_STORE = "keystore";
+    public static final String LICENSE_FILE = LICENSE + LICENSE_SUFFIX;
+
+    /**
+     * 许可证目录
+     */
+    public static final String LIC_DIR = FileUtils.SEPARATOR + FileUtils.LICENSE_FORMAT + FileUtils.SEPARATOR + DateUtil.format(new Date(), DatePattern.PURE_DATE_PATTERN) + FileUtils.SEPARATOR;
+
+    /**
+     * 密钥存储库目录
+     */
+    public static final String KEY_STORE_DIR = StrUtil.replace(ServerInfoUtils.getServerTempPath(), File.separator, FileUtils.SEPARATOR) + FileUtils.SEPARATOR + KEY_STORE + FileUtils.SEPARATOR;
 
     /**
      * 获取文件的md5

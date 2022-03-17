@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
-import java.util.Date;
 
 /**
  * 证书生成接口实现类
@@ -41,9 +40,9 @@ public class LicenseCreatorServiceImpl implements LicenseCreatorService {
             String tempPath = StrUtil.replace(ServerInfoUtils.getServerTempPath(), File.separator, FileUtils.SEPARATOR);
 
             // 根据时间戳，命名lic文件
-            String licDir = tempPath + FileUtils.SEPARATOR + FileUtils.LICENSE + FileUtils.SEPARATOR + DateUtil.format(new Date(), DatePattern.PURE_DATETIME_FORMATTER);
+            String licDir = tempPath + FileUtils.LIC_DIR;
             FileUtil.mkdir(licDir);
-            param.setLicensePath(licDir + FileUtils.SEPARATOR + FileUtils.LICENSE + FileUtils.LICENSE_SUFFIX);
+            param.setLicensePath(licDir + FileUtils.LICENSE_FILE);
         }
 
         LicenseContent licenseContent = LicenseCreatorManager.generateLicense(param);

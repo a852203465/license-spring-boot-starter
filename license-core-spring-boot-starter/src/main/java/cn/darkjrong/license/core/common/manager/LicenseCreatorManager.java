@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.text.MessageFormat;
+import java.io.FileNotFoundException;
 
 /**
  * 系统软件证书生成管理器
@@ -41,9 +41,12 @@ public class LicenseCreatorManager {
             // 5、通过Lic管理器，将内容写入Lic文件中
             licenseManager.store(licenseContent, licenseFile);
             return licenseContent;
-        }catch (Exception e){
-            logger.error("证书生成失败 {}", e.getMessage());
-            throw new LicenseException(MessageFormat.format("证书生成失败！：{0}", param), e);
+        } catch (FileNotFoundException eex) {
+            logger.error("私钥文件不存在", eex);
+            throw new LicenseException("私钥文件不存在, 请检查", eex);
+        } catch (Exception e){
+            logger.error("证书生成失败", e);
+            throw new LicenseException("证书生成失败", e);
         }
     }
 
@@ -61,9 +64,12 @@ public class LicenseCreatorManager {
             File licenseFile = new File(param.getLicensePath());
             licenseManager.store(licenseContent,licenseFile);
             return FileUtil.readBytes(licenseFile);
-        }catch (Exception e){
-            logger.error("证书下载失败 {}", e.getMessage());
-            throw new LicenseException(MessageFormat.format("证书下载失败！：{0}", param), e);
+        }catch (FileNotFoundException eex) {
+            logger.error("证书文件不存在", eex);
+            throw new LicenseException("证书文件不存在, 请检查", eex);
+        } catch (Exception e){
+            logger.error("证书下载失败", e);
+            throw new LicenseException("证书下载失败", e);
         }
     }
 

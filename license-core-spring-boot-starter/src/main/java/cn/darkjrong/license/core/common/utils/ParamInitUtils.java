@@ -2,6 +2,7 @@ package cn.darkjrong.license.core.common.utils;
 
 import cn.darkjrong.license.core.common.domain.LicenseCreatorParam;
 import cn.darkjrong.license.core.common.domain.LicenseVerifyParam;
+import cn.darkjrong.license.core.common.domain.CustomKeyStoreParam;
 import cn.darkjrong.license.core.common.manager.LicenseVerifyManager;
 import de.schlichtherle.license.*;
 
@@ -33,7 +34,7 @@ public class ParamInitUtils {
         Preferences preferences = Preferences.userNodeForPackage(LicenseCreator.class);
         // 设置对证书内容加密的秘钥
         CipherParam cipherParam = new DefaultCipherParam(param.getStorePass());
-        KeyStoreParam privateStoreParam = new DefaultKeyStoreParam(LicenseCreator.class
+        KeyStoreParam privateStoreParam = new CustomKeyStoreParam(LicenseCreator.class
                 , param.getPrivateKeysStorePath()
                 , param.getPrivateAlias()
                 , param.getStorePass()
@@ -78,7 +79,7 @@ public class ParamInitUtils {
     public static LicenseParam initLicenseParam(LicenseVerifyParam param) {
         Preferences preferences = Preferences.userNodeForPackage(LicenseVerifyManager.class);
         CipherParam cipherParam = new DefaultCipherParam(param.getStorePass());
-        KeyStoreParam publicStoreParam = new DefaultKeyStoreParam(LicenseVerifyManager.class
+        KeyStoreParam publicStoreParam = new CustomKeyStoreParam(LicenseVerifyManager.class
                 // 公钥库存储路径
                 , param.getPublicKeysStorePath()
                 // 公匙别名
