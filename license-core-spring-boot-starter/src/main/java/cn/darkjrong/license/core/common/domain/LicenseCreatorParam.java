@@ -1,5 +1,6 @@
 package cn.darkjrong.license.core.common.domain;
 
+import cn.darkjrong.license.core.common.utils.KeyStoreUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -28,9 +29,14 @@ public class LicenseCreatorParam implements Serializable {
     private String password;
 
     /**
+     * 私钥别名
+     */
+    private String privateAlias = KeyStoreUtils.PRIVATE_KEYS_ALIAS;
+
+    /**
      * 私钥库存储路径
      */
-    private String privateKeysStorePath = "/privateKeys.store";
+    private String privateKeysStorePath = "/privateKeys.keystore";
 
     /**
      * 证书失效时间

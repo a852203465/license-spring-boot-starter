@@ -34,11 +34,9 @@ public class ParamInitUtils {
         Preferences preferences = Preferences.userNodeForPackage(LicenseCreator.class);
         // 设置对证书内容加密的秘钥
         CipherParam cipherParam = new DefaultCipherParam(param.getPassword());
-        KeyStoreParam privateStoreParam = new CustomKeyStoreParam(LicenseCreator.class
-                , param.getPrivateKeysStorePath()
-                , KeyStoreUtils.PRIVATE_KEYS_ALIAS
-                , param.getPassword()
-                , param.getPassword());
+        KeyStoreParam privateStoreParam = new CustomKeyStoreParam(LicenseCreator.class,
+                param.getPrivateKeysStorePath(), param.getPrivateAlias(),
+                param.getPassword(), param.getPassword());
         return new DefaultLicenseParam(param.getSubject(), preferences, privateStoreParam, cipherParam);
     }
 
@@ -79,14 +77,9 @@ public class ParamInitUtils {
     public static LicenseParam initLicenseParam(LicenseVerifyParam param) {
         Preferences preferences = Preferences.userNodeForPackage(LicenseVerifyManager.class);
         CipherParam cipherParam = new DefaultCipherParam(param.getStorePass());
-        KeyStoreParam publicStoreParam = new CustomKeyStoreParam(LicenseVerifyManager.class
-                // 公钥库存储路径
-                , param.getPublicKeysStorePath()
-                // 公匙别名
-                , param.getPublicAlias()
-                // 公钥库访问密码
-                , param.getStorePass()
-                , null);
+        KeyStoreParam publicStoreParam = new CustomKeyStoreParam(LicenseVerifyManager.class,
+                param.getPublicKeysStorePath(), param.getPublicAlias(),
+                param.getStorePass(), null);
         return new DefaultLicenseParam(param.getSubject(), preferences, publicStoreParam, cipherParam);
     }
 }

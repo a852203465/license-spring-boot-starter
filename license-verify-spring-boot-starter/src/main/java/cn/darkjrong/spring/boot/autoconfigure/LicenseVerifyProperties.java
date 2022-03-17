@@ -34,6 +34,11 @@ public class LicenseVerifyProperties {
     private String password = "";
 
     /**
+     * 公钥别名
+     */
+    private String publicAlias = KeyStoreUtils.PUBLIC_CERT_ALIAS;
+
+    /**
      *  许可证文件路径
      */
     private String licensePath = "classpath:license.lic";
@@ -44,12 +49,10 @@ public class LicenseVerifyProperties {
     private List<String> excludePathPatterns = new ArrayList<>();
 
     public LicenseVerifyParam getVerifyParam() {
-
         Assert.notBlank(password, "密码不能为空");
-
         LicenseVerifyParam param = new LicenseVerifyParam();
         param.setSubject(subject);
-        param.setPublicAlias(KeyStoreUtils.PUBLIC_CERT_ALIAS);
+        param.setPublicAlias(publicAlias);
         param.setStorePass(password);
         param.setLicensePath(licensePath);
         param.setPublicKeysStorePath(publicKeysStorePath);
