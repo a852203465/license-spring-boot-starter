@@ -33,12 +33,12 @@ public class ParamInitUtils {
     public static LicenseParam initLicenseParam(LicenseCreatorParam param) {
         Preferences preferences = Preferences.userNodeForPackage(LicenseCreator.class);
         // 设置对证书内容加密的秘钥
-        CipherParam cipherParam = new DefaultCipherParam(param.getStorePass());
+        CipherParam cipherParam = new DefaultCipherParam(param.getPassword());
         KeyStoreParam privateStoreParam = new CustomKeyStoreParam(LicenseCreator.class
                 , param.getPrivateKeysStorePath()
-                , param.getPrivateAlias()
-                , param.getStorePass()
-                , param.getKeyPass());
+                , KeyStoreUtils.PRIVATE_KEYS_ALIAS
+                , param.getPassword()
+                , param.getPassword());
         return new DefaultLicenseParam(param.getSubject(), preferences, privateStoreParam, cipherParam);
     }
 

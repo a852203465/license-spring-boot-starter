@@ -1,12 +1,9 @@
 package cn.darkjrong.license.core.common.domain;
 
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjectUtil;
 import de.schlichtherle.license.AbstractKeyStoreParam;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * 自定义密钥存储参数
@@ -63,7 +60,7 @@ public class CustomKeyStoreParam extends AbstractKeyStoreParam {
     @Override
     public InputStream getStream() throws IOException {
         InputStream in = clazz.getResourceAsStream(storePath);
-        if (ObjectUtil.isEmpty(in)) in = FileUtil.getInputStream(storePath);
+        if (ObjectUtil.isEmpty(in)) in = new FileInputStream(storePath);
         if (ObjectUtil.isEmpty(in)) throw new FileNotFoundException(storePath);
         return in;
     }

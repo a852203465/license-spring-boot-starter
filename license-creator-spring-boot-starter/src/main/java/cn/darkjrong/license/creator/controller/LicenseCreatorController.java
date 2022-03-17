@@ -2,6 +2,7 @@ package cn.darkjrong.license.creator.controller;
 
 import cn.darkjrong.license.core.common.domain.LicenseCreatorParam;
 import cn.darkjrong.license.core.common.domain.ResponseVO;
+import cn.darkjrong.license.creator.service.FileService;
 import cn.darkjrong.license.creator.service.LicenseCreatorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,9 @@ public class LicenseCreatorController {
     @Autowired
     private LicenseCreatorService creatorService ;
 
+    @Autowired
+    private FileService fileService;
+
     /**
      * 生成证书
      *
@@ -47,7 +51,7 @@ public class LicenseCreatorController {
      */
     @GetMapping("/download")
     public void download(@RequestParam(value = "path") String path, HttpServletRequest request, HttpServletResponse response) {
-        creatorService.downloadLicense(path, request, response);
+        fileService.download(path, request, response);
     }
 
 

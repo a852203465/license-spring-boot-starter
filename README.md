@@ -33,7 +33,7 @@
 
 ​	下载源码 并install，或者推送到私库引入使用
 
-### 2.2 生成密钥库
+### 2.2 生成密钥库(可通过下面API获取)
 
 ```tex
 1、首先要用KeyTool工具来生成密钥库：（-alias别名 –validity 3650表示10年有效）
@@ -80,25 +80,22 @@ keytool -import -alias publiccert -file certfile.cer -keystore publicCerts.store
 
 - 入参：
 
-  | 字段           | 类型   | 是否必传 | 描述                   |
-  | -------------- | ------ | -------- | ---------------------- |
-  | subject        | String | 是       | 证书名称               |
-  | privateAlias   | String | 是       | 私钥别名               |
-  | keyPass        | String | 是       | 私钥密码               |
-  | storePass      | String | 是       | 私钥库密码             |
-  | licensePath    | String | 否       | 证书生成地址           |
-  | expiryTime     | String | 是       | 证书失效日期           |
-  | consumerAmount | int    | 否       | 授权用户数量， 默认：1 |
-  | description    | String | 否       | 证书描述信息           |
-  | appCode        | String | 是       | 申请码                 |
+  | 字段                 | 类型   | 是否必传 | 描述                                               |
+  | -------------------- | ------ | -------- | -------------------------------------------------- |
+  | subject              | String | 否       | 证书名称，默认：软件许可证书                       |
+  | password             | String | 是       | 私钥密码                                           |
+  | expiryTime           | String | 是       | 证书失效日期                                       |
+  | consumerAmount       | int    | 否       | 授权用户数量， 默认：1                             |
+  | description          | String | 否       | 证书描述信息                                       |
+  | appCode              | String | 是       | 申请码                                             |
+  | privateKeysStorePath | String | 否       | 私钥库存储路径, 默认：classpath:/privateKeys.store |
   
   ```json
   {
-      "subject": "landi",
-      "privateAlias": "privateKeys",
-      "keyPass": "123456a",
-      "storePass": "123456a",
+      "subject": "软件许可证书",
+      "password": "123456a",
       "privateKeysStorePath": "/privateKeys.store",
+      "consumerAmount": 1,
       "expiryTime": "2022-04-01 08:30:00",
       "description": "系统软件许可证书",
       "appCode": "edb7859d4d9fb2f4719c1d89ef9fbf25994e5a60d35be20eb92d25d6d98613963b67f8281ec64ad16d5872569e461671dcf6e8c04c5c6f47d597fc96dfa8dcdbeabeeeec49834575d4e4026403e6f794ababfaa5852e7737d6ede60c7f4a6b5c3027198f424e9e40538567b41a70e7a7c5be8be60f4b671d27b840734d1ff6fd08771a81c8470f93747233b68597f9475be57b4dcd0087f23cba53c9825921f3dd53202f799c7b14919d229230879c6223abf434e9a0bdeb8148ce66549bc882f8da53f86e956cbbf29ddc71481fb576cb93847968fedcdb094811f5129a4072f85d05a6b19860e8ac2bc7b82c447afb"
@@ -135,6 +132,40 @@ keytool -import -alias publiccert -file certfile.cer -keystore publicCerts.store
 
   本地生成许可证文件
 
+#### 3.4 生成私钥
+
+ - URL: http://ip:port/license/privateKeys?validity=1&password=123456a
+
+ - Method: GET
+
+ - 入参
+
+   | 字段     | 类型   | 是否必传 | 描述                          |
+   | -------- | ------ | -------- | ----------------------------- |
+   | validity | Long   | 否       | 证书有效期(单位：年), 默认：1 |
+   | password | String | 是       | 密码                          |
+
+- 返回值
+
+  下载私钥文件
+
+#### 3.5 生成公钥
+
+ - URL: http://ip:port/license/publicCerts?validity=1&password=123456a
+
+ - Method: GET
+
+ - 入参
+
+   | 字段     | 类型   | 是否必传 | 描述                          |
+   | -------- | ------ | -------- | ----------------------------- |
+   | validity | Long   | 否       | 证书有效期(单位：年), 默认：1 |
+   | password | String | 是       | 密码                          |
+
+- 返回值
+
+  下载公钥文件
+
 ### 4 License 配置
 
 #### 4.1 证书验证模块
@@ -142,10 +173,10 @@ keytool -import -alias publiccert -file certfile.cer -keystore publicCerts.store
 ```yaml
 license:
   verify:
-    subject: landi # 证书名称
-    public-alias: publiccert # 公钥别名
-    public-keys-store-path: /publicCerts.store  # 公钥库所在的位置，默认：/publicCerts.store
-    store-pass: 123456a # 公钥库访问密码
+    subject: landi # 证书名称, 默认：软件许可证书
+    public-keys-store-path: /publicCerts.store  # 公钥库所在的位置，默认：classpath:/publicCerts.store
+    password: 123456a # 公钥库访问密码
+    exclude-path-patterns: /a    # 需要跳过验证授权的接口
     license-path: G:/workspace-idea/license-demo/license/20220311090429/license.lic # 证书位置， 默认：classpath:license.lic
 ```
 

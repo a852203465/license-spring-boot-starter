@@ -109,7 +109,16 @@ public class FileUtils {
         }catch (Exception ignored) {}
     }
 
-
+    /**
+     * 删除文件
+     *
+     * @param file 文件
+     */
+    public static void del(String file) {
+        try {
+            FileUtil.del(file);
+        }catch (Exception ignored) {}
+    }
 
 
 

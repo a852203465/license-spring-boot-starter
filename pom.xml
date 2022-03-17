@@ -118,9 +118,11 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
+                    <fork>true</fork>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                    <compilerArgument>-XDignore.symbol.file</compilerArgument>
                 </configuration>
             </plugin>
 

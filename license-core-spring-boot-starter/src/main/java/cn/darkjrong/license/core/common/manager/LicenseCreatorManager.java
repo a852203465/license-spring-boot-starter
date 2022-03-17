@@ -2,6 +2,7 @@ package cn.darkjrong.license.core.common.manager;
 
 import cn.darkjrong.license.core.common.domain.LicenseCreatorParam;
 import cn.darkjrong.license.core.common.exceptions.LicenseException;
+import cn.darkjrong.license.core.common.utils.FileUtils;
 import cn.darkjrong.license.core.common.utils.ParamInitUtils;
 import cn.hutool.core.io.FileUtil;
 import de.schlichtherle.license.LicenseContent;
@@ -26,9 +27,11 @@ public class LicenseCreatorManager {
     /**
      * 生成License证书
      *
+     * @param param       参数
+     * @param licensePath 授权路径
      * @return {@link LicenseContent}
      */
-    public static LicenseContent generateLicense(LicenseCreatorParam param){
+    public static LicenseContent generateLicense(LicenseCreatorParam param, String licensePath){
         try {
             // 1、根据外部传入的创建Lic的参数信息初始化lic参数（秘钥部分）
             LicenseParam licenseParam = ParamInitUtils.initLicenseParam(param);
@@ -37,7 +40,7 @@ public class LicenseCreatorManager {
             // 3、构建Lic管理器
             LicenseManager licenseManager = new LicenseCustomManager(licenseParam);
             // 4、根据param传入的lic生成的路径创建空文件
-            File licenseFile = new File(param.getLicensePath());
+            File licenseFile = new File(licensePath);
             // 5、通过Lic管理器，将内容写入Lic文件中
             licenseManager.store(licenseContent, licenseFile);
             return licenseContent;
@@ -53,15 +56,17 @@ public class LicenseCreatorManager {
     /**
      * 下载License证书
      *
-     * @param param 参数
+     * @param param       参数
+     * @param licensePath 授权路径
      * @return {@link byte[]} 证书字节数组
      */
-    public static byte[] download(LicenseCreatorParam param) {
+    public static byte[] download(LicenseCreatorParam param, String licensePath) {
+        File licenseFile = null;
         try {
             LicenseParam licenseParam = ParamInitUtils.initLicenseParam(param);
             LicenseContent licenseContent = ParamInitUtils.initLicenseContent(param);
             LicenseManager licenseManager = new LicenseCustomManager(licenseParam);
-            File licenseFile = new File(param.getLicensePath());
+            licenseFile = new File(licensePath);
             licenseManager.store(licenseContent,licenseFile);
             return FileUtil.readBytes(licenseFile);
         }catch (FileNotFoundException eex) {
@@ -70,6 +75,8 @@ public class LicenseCreatorManager {
         } catch (Exception e){
             logger.error("证书下载失败", e);
             throw new LicenseException("证书下载失败", e);
+        }finally {
+            FileUtils.del(licenseFile);
         }
     }
 

@@ -20,32 +20,17 @@ public class LicenseCreatorParam implements Serializable {
     /**
      * 证书主题
      */
-    private String subject;
-
-    /**
-     * 私钥别名
-     */
-    private String privateAlias = "privateKeys";
+    private String subject = "软件许可证书";
 
     /**
      * 私钥密码（需要妥善保管，不能让使用者知道
      */
-    private String keyPass;
+    private String password;
 
     /**
      * 私钥库存储路径
      */
     private String privateKeysStorePath = "/privateKeys.store";
-
-    /**
-     * 访问私钥库的密码
-     */
-    private String storePass;
-
-    /**
-     * 证书生成路径
-     */
-    private String licensePath;
 
     /**
      * 证书失效时间
