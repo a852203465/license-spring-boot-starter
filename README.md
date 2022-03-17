@@ -33,20 +33,26 @@
 
 ​	下载源码 并install，或者推送到私库引入使用
 
-### 2.2 生成密钥库(可通过下面API获取)
+### 2.2 生成密钥库
+
+#### 2.2.1 命令方式生成
 
 ```tex
 1、首先要用KeyTool工具来生成密钥库：（-alias别名 –validity 3650表示10年有效）
-keytool -genkey -alias privatekeys -keysize 1024 -keystore privateKeys.store -validity 3650
+keytool -genkey -alias privatekeys -keysize 1024 -keystore privateKeys.keystore -validity 3650
 
 2、然后将密钥库中名称为‘privatekeys’的证书条目导出到证书文件certfile.cer中：
-keytool -export -alias privatekeys -file certfile.cer -keystore privateKeys.store
+keytool -export -alias privatekeys -file certfile.cer -keystore privateKeys.keystore
 
 3、然后再把这个证书文件的信息导入到公钥库中别名为publiccert的证书条目中：
-keytool -import -alias publiccert -file certfile.cer -keystore publicCerts.store
+keytool -import -alias publiccert -file certfile.cer -keystore publicCerts.keystore
 ```
 
-最后生成的文件privateKeys.store 和 publicCerts.store拷贝出来备用。
+最后生成的文件privateKeys.keystore 和 publicCerts.keystore拷贝出来备用。
+
+#### 2.2.2 API方式生成
+
+ 可通过`3.4, 3.5` 节生成
 
 ### 3 License API 说明
 
@@ -88,13 +94,15 @@ keytool -import -alias publiccert -file certfile.cer -keystore publicCerts.store
   | consumerAmount       | int    | 否       | 授权用户数量， 默认：1                             |
   | description          | String | 否       | 证书描述信息                                       |
   | appCode              | String | 是       | 申请码                                             |
-  | privateKeysStorePath | String | 否       | 私钥库存储路径, 默认：classpath:/privateKeys.store |
+  | privateKeysStorePath | String | 否       | 私钥库存储路径, 默认：classpath:/privateKeys.keystore |
+  | privateAlias         | String | 否       | 私库别名，默认：privateKeys                        |
   
   ```json
   {
       "subject": "软件许可证书",
       "password": "123456a",
-      "privateKeysStorePath": "/privateKeys.store",
+      "privateAlias": "privateKeys",
+      "privateKeysStorePath": "/privateKeys.keystore",
       "consumerAmount": 1,
       "expiryTime": "2022-04-01 08:30:00",
       "description": "系统软件许可证书",
@@ -174,7 +182,8 @@ keytool -import -alias publiccert -file certfile.cer -keystore publicCerts.store
 license:
   verify:
     subject: landi # 证书名称, 默认：软件许可证书
-    public-keys-store-path: /publicCerts.store  # 公钥库所在的位置，默认：classpath:/publicCerts.store
+    publicAlias: publicCert # 公钥别名，默认：publicCert
+    public-keys-store-path: /publicCerts.keystore  # 公钥库所在的位置，默认：classpath:/publicCerts.store
     password: 123456a # 公钥库访问密码
     exclude-path-patterns: /a    # 需要跳过验证授权的接口
     license-path: G:/workspace-idea/license-demo/license/20220311090429/license.lic # 证书位置， 默认：classpath:license.lic
