@@ -21,7 +21,10 @@ import java.util.List;
 @Configuration
 public class LicenseInterceptorConfig implements WebMvcConfigurer {
 
-    private static final List<String> excludePathPatterns = Arrays.asList("/license/getAppCode", "/license/generate", "/license/download", "/license/privateKeys", "/license/publicCerts");
+    /**
+     * 跳过许可证的API
+     */
+    private static final List<String> EXCLUDE_PATH_PATTERNS = Arrays.asList("/license/getAppCode", "/license/generate", "/license/download", "/license/privateKeys", "/license/publicCerts");
 
     @Autowired
     private LicenseVerifyProperties licenseVerifyProperties;
@@ -34,7 +37,7 @@ public class LicenseInterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> excludePath = licenseVerifyProperties.getExcludePathPatterns();
-        excludePath.addAll(excludePathPatterns);
+        excludePath.addAll(EXCLUDE_PATH_PATTERNS);
         registry.addInterceptor(getLicenseCheckInterceptor()).addPathPatterns("/**").excludePathPatterns(excludePath);
     }
 }

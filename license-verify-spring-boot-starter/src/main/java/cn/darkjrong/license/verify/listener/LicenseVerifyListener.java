@@ -7,10 +7,9 @@ import cn.darkjrong.license.verify.quartz.QuartzUtils;
 import cn.darkjrong.spring.boot.autoconfigure.LicenseVerifyProperties;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
 import org.quartz.Scheduler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -25,10 +24,9 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author Rong.Jia
  * @date 2022/03/10
  */
+@Slf4j
 @Component
 public class LicenseVerifyListener implements ApplicationListener<ContextRefreshedEvent> {
-
-    private static final Logger logger = LoggerFactory.getLogger(LicenseVerifyListener.class);
 
     @Autowired
     private LicenseVerifyProperties licenseVerifyProperties;
@@ -43,6 +41,7 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+
         if (StrUtil.isNotEmpty(licenseVerifyProperties.getLicensePath())) {
             install();
             if (FileUtil.exist(licenseVerifyProperties.getLicensePath())) {
@@ -52,7 +51,7 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
                 }
             }
         }else {
-            logger.warn("未检测到license文件，请提供");
+            log.warn("未检测到license文件，请提供");
         }
 
         QuartzTask quartzTask = QuartzTask.builder()
@@ -70,14 +69,14 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
      */
     protected void install() {
 
-        logger.info("++++++++ 开始安装证书 ++++++++");
+        log.info("++++++++ 开始安装证书 ++++++++");
 
         // 走定义校验证书并安装
         try {
             LicenseVerifyManager.install(licenseVerifyProperties.getVerifyParam());
-            logger.info("++++++++ 证书安装成功 ++++++++");
+            log.info("++++++++ 证书安装成功 ++++++++");
         }catch (Exception e) {
-            logger.error("++++++++ 证书安装失败 ++++++++");
+            log.error("++++++++ 证书安装失败 ++++++++");
         }
     }
 

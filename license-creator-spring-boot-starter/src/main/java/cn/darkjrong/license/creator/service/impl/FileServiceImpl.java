@@ -5,8 +5,7 @@ import cn.darkjrong.license.creator.service.FileService;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ArrayUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +20,9 @@ import java.net.URLEncoder;
  * @author Rong.Jia
  * @date 2022/03/17
  */
+@Slf4j
 @Service
 public class FileServiceImpl implements FileService {
-
-    private static final Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
 
     @Override
     public void download(String path, HttpServletRequest request, HttpServletResponse response) {
@@ -41,7 +39,7 @@ public class FileServiceImpl implements FileService {
             setAttachmentCoding(request, response, fileName);
             FileUtil.writeToStream(file, response.getOutputStream());
         }catch (Exception e) {
-            logger.error("文件 {} : 下载异常 {}", path, e.getMessage());
+            log.error("文件 {} : 下载异常 {}", path, e.getMessage());
             throw new LicenseException(String.format("文件 【%s】 下载异常!, 请重试", path));
         }
     }
@@ -59,7 +57,7 @@ public class FileServiceImpl implements FileService {
             setAttachmentCoding(request, response, fileName);
             IoUtil.write(response.getOutputStream(), Boolean.TRUE, bytes);
         }catch (Exception e) {
-            logger.error("文件 {} : 下载异常 {}", fileName, e.getMessage());
+            log.error("文件 {} : 下载异常 {}", fileName, e.getMessage());
             throw new LicenseException(String.format("文件 【%s】 下载异常!, 请重试", fileName));
         }
     }

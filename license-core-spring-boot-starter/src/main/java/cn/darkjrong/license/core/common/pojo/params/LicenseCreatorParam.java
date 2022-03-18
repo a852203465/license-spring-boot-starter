@@ -1,4 +1,4 @@
-package cn.darkjrong.license.core.common.domain;
+package cn.darkjrong.license.core.common.pojo.params;
 
 import cn.darkjrong.license.core.common.utils.KeyStoreUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;

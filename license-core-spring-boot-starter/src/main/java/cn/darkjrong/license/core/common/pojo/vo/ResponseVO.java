@@ -1,4 +1,4 @@
-package cn.darkjrong.license.core.common.domain;
+package cn.darkjrong.license.core.common.pojo.vo;
 
 import cn.darkjrong.license.core.common.enums.ResponseEnum;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package cn.darkjrong.license.core.common.domain;
+package cn.darkjrong.license.core.common.pojo.params;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

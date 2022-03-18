@@ -1,10 +1,9 @@
 package cn.darkjrong.license.verify.listener;
 
-import cn.darkjrong.license.core.common.domain.LicenseExtraParam;
+import cn.darkjrong.license.core.common.pojo.params.LicenseExtraParam;
 import cn.darkjrong.license.core.common.exceptions.LicenseException;
 import cn.hutool.core.collection.CollectionUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

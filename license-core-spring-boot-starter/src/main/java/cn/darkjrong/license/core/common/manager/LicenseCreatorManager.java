@@ -1,15 +1,14 @@
 package cn.darkjrong.license.core.common.manager;
 
-import cn.darkjrong.license.core.common.domain.LicenseCreatorParam;
 import cn.darkjrong.license.core.common.exceptions.LicenseException;
+import cn.darkjrong.license.core.common.pojo.params.LicenseCreatorParam;
 import cn.darkjrong.license.core.common.utils.FileUtils;
 import cn.darkjrong.license.core.common.utils.ParamInitUtils;
 import cn.hutool.core.io.FileUtil;
 import de.schlichtherle.license.LicenseContent;
 import de.schlichtherle.license.LicenseManager;
 import de.schlichtherle.license.LicenseParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,9 +19,8 @@ import java.io.FileNotFoundException;
  * @author Rong.Jia
  * @date 2022/03/10
  */
+@Slf4j
 public class LicenseCreatorManager {
-
-    private static final Logger logger = LoggerFactory.getLogger(LicenseCreatorManager.class);
 
     /**
      * 生成License证书
@@ -45,10 +43,10 @@ public class LicenseCreatorManager {
             licenseManager.store(licenseContent, licenseFile);
             return licenseContent;
         } catch (FileNotFoundException eex) {
-            logger.error("私钥文件不存在", eex);
+            log.error("私钥文件不存在", eex);
             throw new LicenseException("私钥文件不存在, 请检查", eex);
         } catch (Exception e){
-            logger.error("证书生成失败", e);
+            log.error("证书生成失败", e);
             throw new LicenseException("证书生成失败", e);
         }
     }
@@ -70,10 +68,10 @@ public class LicenseCreatorManager {
             licenseManager.store(licenseContent,licenseFile);
             return FileUtil.readBytes(licenseFile);
         }catch (FileNotFoundException eex) {
-            logger.error("证书文件不存在", eex);
+            log.error("证书文件不存在", eex);
             throw new LicenseException("证书文件不存在, 请检查", eex);
         } catch (Exception e){
-            logger.error("证书下载失败", e);
+            log.error("证书下载失败", e);
             throw new LicenseException("证书下载失败", e);
         }finally {
             FileUtils.del(licenseFile);

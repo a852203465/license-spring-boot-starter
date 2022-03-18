@@ -1,10 +1,8 @@
 package cn.darkjrong.license.core.common.manager;
 
-import cn.darkjrong.license.core.common.domain.LicenseExtraParam;
-import cn.darkjrong.license.core.common.utils.EncryptionUtils;
+import cn.darkjrong.license.core.common.pojo.params.LicenseExtraParam;
 import cn.darkjrong.license.core.common.utils.ServerInfoUtils;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
@@ -12,8 +10,7 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import de.schlichtherle.license.*;
 import de.schlichtherle.xml.GenericCertificate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.beans.XMLDecoder;
 import java.io.ByteArrayInputStream;
@@ -27,9 +24,8 @@ import java.util.List;
  * @author Rong.Jia
  * @date 2022/03/10
  */
+@Slf4j
 public class LicenseCustomManager extends LicenseManager {
-
-    private static final Logger logger = LoggerFactory.getLogger(LicenseCustomManager.class);
 
     public LicenseCustomManager(LicenseParam param) {
         super(param);
@@ -113,18 +109,18 @@ public class LicenseCustomManager extends LicenseManager {
 
         if (null != notAfter && now.after(notAfter)) {
             String message = "证书失效时间不能早于当前时间";
-            logger.error(message);
+            log.error(message);
             throw new LicenseContentException(message);
         }
         if (null != notBefore && null != notAfter && notAfter.before(notBefore)) {
             String message = "证书生效时间不能晚于证书失效时间";
-            logger.error(message);
+            log.error(message);
             throw new LicenseContentException(message);
         }
         final String consumerType = content.getConsumerType();
         if (null == consumerType) {
             String message = "用户类型不能为空";
-            logger.error(message);
+            log.error(message);
             throw new LicenseContentException(message);
         }
 
@@ -149,7 +145,7 @@ public class LicenseCustomManager extends LicenseManager {
         super.validate(content);
 
         //2、 然后校验自定义的License参数 License中可被允许的参数信息
-        LicenseExtraParam expectedCheck = EncryptionUtils.decode(Convert.toStr(content.getExtra()), LicenseExtraParam.class);
+        LicenseExtraParam expectedCheck = (LicenseExtraParam) content.getExtra();
 
         //当前服务器真实的参数信息
         LicenseExtraParam serverCheckModel = ServerInfoUtils.getServerInfos();
@@ -157,29 +153,29 @@ public class LicenseCustomManager extends LicenseManager {
             //校验IP地址
             if (!checkIpAddress(expectedCheck.getIpAddress(), serverCheckModel.getIpAddress())) {
                 String message = "系统证书无效，当前服务器的IP没在授权范围内";
-                logger.error(message);
+                log.error(message);
                 throw new LicenseContentException(message);
             }
             //校验Mac地址
             if (!checkIpAddress(expectedCheck.getMacAddress(), serverCheckModel.getMacAddress())) {
                 String message = "系统证书无效，当前服务器的Mac地址没在授权范围内";
-                logger.error(message);
+                log.error(message);
                 throw new LicenseContentException(message);
             }
             //校验主板序列号
             if (!checkSerial(expectedCheck.getMainBoardSerial(), serverCheckModel.getMainBoardSerial())) {
                 String message = "系统证书无效，当前服务器的主板序列号没在授权范围内";
-                logger.error(message);
+                log.error(message);
                 throw new LicenseContentException(message);
             }
             //校验CPU序列号
             if (!checkSerial(expectedCheck.getCpuSerial(), serverCheckModel.getCpuSerial())) {
                 String message = "系统证书无效，当前服务器的CPU序列号没在授权范围内";
-                logger.error(message);
+                log.error(message);
                 throw new LicenseContentException(message);
             }
         } else {
-            logger.error("不能获取服务器硬件信息");
+            log.error("不能获取服务器硬件信息");
             throw new LicenseContentException("不能获取服务器硬件信息");
         }
     }

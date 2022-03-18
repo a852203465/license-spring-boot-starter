@@ -1,7 +1,7 @@
 package cn.darkjrong.license.creator.service.impl;
 
-import cn.darkjrong.license.core.common.domain.LicenseCreatorParam;
 import cn.darkjrong.license.core.common.manager.LicenseCreatorManager;
+import cn.darkjrong.license.core.common.pojo.params.LicenseCreatorParam;
 import cn.darkjrong.license.core.common.utils.FileUtils;
 import cn.darkjrong.license.core.common.utils.ServerInfoUtils;
 import cn.darkjrong.license.creator.service.LicenseCreatorService;
@@ -10,8 +10,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import de.schlichtherle.license.LicenseContent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -23,10 +22,9 @@ import java.text.MessageFormat;
  * @author Rong.Jia
  * @date 2022/03/10
  */
+@Slf4j
 @Service
 public class LicenseCreatorServiceImpl implements LicenseCreatorService {
-
-    private static final Logger logger = LoggerFactory.getLogger(LicenseCreatorServiceImpl.class);
 
     @Override
     public String generateLicense(LicenseCreatorParam param) {
@@ -40,7 +38,7 @@ public class LicenseCreatorServiceImpl implements LicenseCreatorService {
                 DateUtil.format(licenseContent.getNotBefore(), DatePattern.NORM_DATETIME_FORMAT),
                 DateUtil.format(licenseContent.getNotAfter(), DatePattern.NORM_DATETIME_FORMAT));
 
-        logger.info(message);
+        log.info(message);
 
         return fileName;
     }

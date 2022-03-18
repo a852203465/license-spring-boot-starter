@@ -1,6 +1,6 @@
 package cn.darkjrong.license.core.controller;
 
-import cn.darkjrong.license.core.common.domain.ResponseVO;
+import cn.darkjrong.license.core.common.pojo.vo.ResponseVO;
 import cn.darkjrong.license.core.common.utils.EncryptionUtils;
 import cn.darkjrong.license.core.common.utils.ServerInfoUtils;
 import org.slf4j.Logger;

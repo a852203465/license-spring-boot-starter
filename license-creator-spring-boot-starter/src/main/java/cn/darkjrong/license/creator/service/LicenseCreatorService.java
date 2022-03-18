@@ -1,6 +1,6 @@
 package cn.darkjrong.license.creator.service;
 
-import cn.darkjrong.license.core.common.domain.LicenseCreatorParam;
+import cn.darkjrong.license.core.common.pojo.params.LicenseCreatorParam;
 
 /**
  * 证书生成接口

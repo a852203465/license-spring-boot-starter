@@ -1,9 +1,11 @@
 package cn.darkjrong.license.core.common.utils;
 
-import cn.darkjrong.license.core.common.domain.LicenseCreatorParam;
-import cn.darkjrong.license.core.common.domain.LicenseVerifyParam;
-import cn.darkjrong.license.core.common.domain.CustomKeyStoreParam;
+import cn.darkjrong.license.core.common.pojo.params.CustomKeyStoreParam;
+import cn.darkjrong.license.core.common.pojo.params.LicenseCreatorParam;
+import cn.darkjrong.license.core.common.pojo.params.LicenseExtraParam;
+import cn.darkjrong.license.core.common.pojo.params.LicenseVerifyParam;
 import cn.darkjrong.license.core.common.manager.LicenseVerifyManager;
+import cn.hutool.core.convert.Convert;
 import de.schlichtherle.license.*;
 
 import javax.security.auth.x500.X500Principal;
@@ -61,11 +63,11 @@ public class ParamInitUtils {
         // 设置证书用户类型
         licenseContent.setConsumerType("user");
         // 设置证书用户数量
-        licenseContent.setConsumerAmount(1);
+        licenseContent.setConsumerAmount(param.getConsumerAmount());
         // 设置证书描述信息
         licenseContent.setInfo(param.getDescription());
         // 设置证书扩展信息（对象 -- 额外的ip、mac、cpu等信息）
-        licenseContent.setExtra(param.getAppCode());
+        licenseContent.setExtra(EncryptionUtils.decode(Convert.toStr(param.getAppCode()), LicenseExtraParam.class));
         return licenseContent;
     }
 

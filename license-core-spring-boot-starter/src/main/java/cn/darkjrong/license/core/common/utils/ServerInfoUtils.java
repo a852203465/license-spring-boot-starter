@@ -1,12 +1,11 @@
 package cn.darkjrong.license.core.common.utils;
 
-import cn.darkjrong.license.core.common.domain.LicenseExtraParam;
+import cn.darkjrong.license.core.common.pojo.params.LicenseExtraParam;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -23,9 +22,8 @@ import java.util.stream.Collectors;
  * @author Rong.Jia
  * @date 2022/03/10
  */
+@Slf4j
 public class ServerInfoUtils {
-
-    private static final Logger logger = LoggerFactory.getLogger(ServerInfoUtils.class);
 
     private static class ServerInfosContainer {
         private static List<String> ipAddress = null;
@@ -48,7 +46,7 @@ public class ServerInfoUtils {
             result.setCpuSerial(ServerInfosContainer.cpuSerial);
             result.setMainBoardSerial(ServerInfosContainer.mainBoardSerial);
         } catch (Exception e) {
-            logger.error("获取服务器硬件信息失败, {}", e.getMessage());
+            log.error("获取服务器硬件信息失败, {}", e.getMessage());
         }
         return result;
     }
@@ -125,7 +123,7 @@ public class ServerInfoUtils {
                 }
             }
         } catch (IOException e) {
-            logger.error("获取Linux cpu信息错误 {}", e.getMessage());
+            log.error("获取Linux cpu信息错误 {}", e.getMessage());
         }finally {
             IoUtil.close(bufferedReader);
         }
@@ -161,7 +159,7 @@ public class ServerInfoUtils {
                 result += line;
             }
         } catch (Exception e) {
-            logger.error("获取window cpu信息错误, {}", e.getMessage());
+            log.error("获取window cpu信息错误, {}", e.getMessage());
         }finally {
             IoUtil.close(input);
             FileUtils.del(file);
@@ -187,7 +185,7 @@ public class ServerInfoUtils {
                 break;
             }
         } catch (IOException e) {
-            logger.error("获取Linux主板信息错误 {}", e.getMessage());
+            log.error("获取Linux主板信息错误 {}", e.getMessage());
         }finally {
             IoUtil.close(br);
         }
@@ -222,7 +220,7 @@ public class ServerInfoUtils {
                 result += line;
             }
         } catch (Exception e) {
-            logger.error("获取Window主板信息错误 {}", e.getMessage());
+            log.error("获取Window主板信息错误 {}", e.getMessage());
         }finally {
             IoUtil.close(input);
             FileUtils.del(file);
@@ -284,7 +282,7 @@ public class ServerInfoUtils {
             }
             return stringBuilder.toString().toUpperCase();
         } catch (SocketException e) {
-            logger.error("getMacByInetAddress {}", e.getMessage());
+            log.error("getMacByInetAddress {}", e.getMessage());
         }
         return null;
     }

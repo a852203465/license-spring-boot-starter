@@ -1,4 +1,4 @@
-package cn.darkjrong.license.core.common.domain;
+package cn.darkjrong.license.core.common.pojo.params;
 
 import cn.hutool.core.util.ObjectUtil;
 import de.schlichtherle.license.AbstractKeyStoreParam;
@@ -13,33 +13,31 @@ import java.io.*;
  */
 public class CustomKeyStoreParam extends AbstractKeyStoreParam {
 
+    private final String alias, storePwd, keyPwd;
+
     /**
      * 公钥/私钥在磁盘上的存储路径
      */
-    private final String alias, storePwd, keyPwd, storePath;
+    private final String resource;
+
     private final Class<?> clazz;
 
     /**
      * 自定义密钥存储参数
      *
      * @param clazz    Class
-     * @param storePath 公钥/私钥在磁盘上的存储路径
+     * @param resource 公钥/私钥在磁盘上的存储路径
      * @param alias    别名
      * @param storePwd 访问私钥库的密码
      * @param keyPwd   私钥密码
      */
-    public CustomKeyStoreParam(
-            final Class clazz,
-            final String storePath,
-            final String alias,
-            final String storePwd,
-            final String keyPwd) {
-        super(clazz, storePath);
+    public CustomKeyStoreParam(final Class clazz, final String resource, final String alias, final String storePwd, final String keyPwd) {
+        super(clazz, resource);
         this.clazz = clazz;
         this.alias = alias;
         this.storePwd = storePwd;
         this.keyPwd = keyPwd;
-        this.storePath = storePath;
+        this.resource = resource;
     }
 
     @Override
@@ -59,9 +57,9 @@ public class CustomKeyStoreParam extends AbstractKeyStoreParam {
 
     @Override
     public InputStream getStream() throws IOException {
-        InputStream in = clazz.getResourceAsStream(storePath);
-        if (ObjectUtil.isEmpty(in)) in = new FileInputStream(storePath);
-        if (ObjectUtil.isEmpty(in)) throw new FileNotFoundException(storePath);
+        InputStream in = clazz.getResourceAsStream(resource);
+        if (ObjectUtil.isEmpty(in)) in = new FileInputStream(resource);
+        if (ObjectUtil.isEmpty(in)) throw new FileNotFoundException(resource);
         return in;
     }
 }

@@ -4,14 +4,18 @@ import cn.darkjrong.license.core.common.utils.FileUtils;
 import cn.darkjrong.license.core.common.utils.KeyStoreUtils;
 import cn.darkjrong.license.creator.service.KeyStoreService;
 import cn.hutool.core.io.FileUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+/**
+ * 关键商店服务实现类
+ *
+ * @author Rong.Jia
+ * @date 2022/03/18
+ */
+@Slf4j
 @Service
 public class KeyStoreServiceImpl implements KeyStoreService {
-
-    private static final Logger logger = LoggerFactory.getLogger(KeyStoreServiceImpl.class);
 
     @Override
     public byte[] genPrivateKeys(Long validity, String password) {

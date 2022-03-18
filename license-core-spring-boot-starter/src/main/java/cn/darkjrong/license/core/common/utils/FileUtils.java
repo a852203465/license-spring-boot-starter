@@ -9,8 +9,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.CharUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.Date;
@@ -23,9 +22,8 @@ import java.util.stream.Collectors;
  * @author Rong.Jia
  * @date 2022/03/11
  */
+@Slf4j
 public class FileUtils {
-
-    private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
     public static final String LICENSE = "license";
     public static final String LICENSE_FORMAT = "lic";
@@ -54,7 +52,7 @@ public class FileUtils {
         try {
             return DigestUtil.md5Hex(file);
         } catch (Exception e) {
-            logger.error("许可证文件不存在 {}", e.getMessage());
+            log.error("许可证文件不存在 {}", e.getMessage());
         }
         return null;
     }
@@ -69,7 +67,7 @@ public class FileUtils {
         try {
             return DigestUtil.md5Hex(file);
         } catch (Exception e) {
-            logger.error("许可证文件不存在 {}", e.getMessage());
+            log.error("许可证文件不存在 {}", e.getMessage());
         }
         return null;
     }
@@ -94,7 +92,6 @@ public class FileUtils {
                 }
             }
         }
-
         throw new LicenseException("未检测到license文件，请提供");
     }
 

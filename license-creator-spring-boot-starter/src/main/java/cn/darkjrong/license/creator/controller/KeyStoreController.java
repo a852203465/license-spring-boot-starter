@@ -5,10 +5,12 @@ import cn.darkjrong.license.creator.service.FileService;
 import cn.darkjrong.license.creator.service.KeyStoreService;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ReUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,11 +21,11 @@ import javax.servlet.http.HttpServletResponse;
  * @author Rong.Jia
  * @date 2022/03/17
  */
+@Slf4j
 @RestController
 @RequestMapping("/license")
 public class KeyStoreController {
 
-    private static final Logger logger = LoggerFactory.getLogger(KeyStoreController.class);
     private static final String PWD_REG = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$";
 
     @Autowired

@@ -1,9 +1,11 @@
-package cn.darkjrong.license.core.common.domain;
+package cn.darkjrong.license.core.common.pojo.params;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 /**
  * License校验类需要的参数
@@ -14,7 +16,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LicenseVerifyParam {
+public class LicenseVerifyParam implements Serializable {
+
+    private static final long serialVersionUID = 8969466786494577755L;
 
     /**
      * 证书主题

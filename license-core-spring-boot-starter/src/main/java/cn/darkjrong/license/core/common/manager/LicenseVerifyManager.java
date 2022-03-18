@@ -1,14 +1,13 @@
 package cn.darkjrong.license.core.common.manager;
 
-import cn.darkjrong.license.core.common.domain.LicenseVerifyParam;
 import cn.darkjrong.license.core.common.exceptions.LicenseException;
+import cn.darkjrong.license.core.common.pojo.params.LicenseVerifyParam;
 import cn.darkjrong.license.core.common.utils.ParamInitUtils;
 import de.schlichtherle.license.LicenseContent;
 import de.schlichtherle.license.LicenseManager;
 import de.schlichtherle.license.LicenseParam;
 import de.schlichtherle.license.NoLicenseInstalledException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
@@ -20,9 +19,8 @@ import java.io.File;
  * @author Rong.Jia
  * @date 2022/03/10
  */
+@Slf4j
 public class LicenseVerifyManager {
-
-    private static final Logger logger = LoggerFactory.getLogger(LicenseVerifyManager.class);
 
     /**
      * 安装License证书
@@ -46,7 +44,7 @@ public class LicenseVerifyManager {
             // 开始安装
             return licenseManager.install(licenseFile);
         }catch (Exception e){
-            logger.error("证书安装异常 {}", e);
+            log.error("证书安装异常", e);
             throw new LicenseException("证书安装异常", e);
         }
     }
@@ -87,10 +85,10 @@ public class LicenseVerifyManager {
         try {
             return licenseManager.verify();
         }catch (NoLicenseInstalledException ex){
-            logger.error("证书未安装! {}", ex);
+            log.error("证书未安装!", ex);
             throw new LicenseException("证书未安装, 请检查证书", ex);
         } catch (Exception e){
-            logger.error("证书校验不通过 {}", e);
+            log.error("证书校验不通过", e);
             throw new LicenseException("证书校验不通过, 请检查证书是否合法", e);
         }
     }

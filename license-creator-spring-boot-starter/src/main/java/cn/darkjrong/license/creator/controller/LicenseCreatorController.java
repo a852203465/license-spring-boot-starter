@@ -1,11 +1,10 @@
 package cn.darkjrong.license.creator.controller;
 
-import cn.darkjrong.license.core.common.domain.LicenseCreatorParam;
-import cn.darkjrong.license.core.common.domain.ResponseVO;
+import cn.darkjrong.license.core.common.pojo.params.LicenseCreatorParam;
+import cn.darkjrong.license.core.common.pojo.vo.ResponseVO;
 import cn.darkjrong.license.creator.service.FileService;
 import cn.darkjrong.license.creator.service.LicenseCreatorService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +18,10 @@ import javax.servlet.http.HttpServletResponse;
  * @author Rong.Jia
  * @date 2022/03/10
  */
+@Slf4j
 @RestController
 @RequestMapping("/license")
 public class LicenseCreatorController {
-
-    private static final Logger logger = LoggerFactory.getLogger(LicenseCreatorController.class);
 
     @Autowired
     private LicenseCreatorService creatorService ;

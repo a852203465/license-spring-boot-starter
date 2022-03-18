@@ -1,6 +1,6 @@
 package cn.darkjrong.spring.boot.autoconfigure;
 
-import cn.darkjrong.license.core.common.domain.LicenseVerifyParam;
+import cn.darkjrong.license.core.common.pojo.params.LicenseVerifyParam;
 import cn.darkjrong.license.core.common.utils.KeyStoreUtils;
 import cn.hutool.core.lang.Assert;
 import lombok.Data;

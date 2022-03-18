@@ -1,7 +1,6 @@
 package cn.darkjrong.spring.boot.autoconfigure;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -12,15 +11,14 @@ import org.springframework.context.annotation.Configuration;
  * @author Rong.Jia
  * @date 2022/03/10
  */
+@Slf4j
 @Configuration
 @EnableConfigurationProperties(LicenseVerifyProperties.class)
 @ComponentScan("cn.darkjrong.license.verify")
 public class LicenseVerifyAutoConfiguration {
 
-    public static final Logger logger = LoggerFactory.getLogger(LicenseVerifyAutoConfiguration.class);
-
     public LicenseVerifyAutoConfiguration(){
-        logger.info("============ license-verify-spring-boot-starter initialization！ ===========");
+        log.info("============ license-verify-spring-boot-starter initialization！ ===========");
     }
 
 
