@@ -191,6 +191,38 @@ license:
 
 内置lic文件变动定时检测功能，会自动启动
 
+### 5 证书验证扩展
+
+ 实现`VerifyListener`接口，并重写`verify(LicenseExtraParam param)`，然后将实现类放入Spring容器即可
+
+```java
+/**
+ * 验证侦听器实现类
+ *
+ * @author Rong.Jia
+ * @date 2022/03/18
+ */
+@Service
+public class VerifyListenerImpl implements VerifyListener {
+
+    @Override
+    public boolean verify(LicenseExtraParam param) throws LicenseException {
+
+        // 自定义验证逻辑
+
+        return true;
+    }
+}
+```
+
+
+
+
+
+
+
+
+
 
 
 

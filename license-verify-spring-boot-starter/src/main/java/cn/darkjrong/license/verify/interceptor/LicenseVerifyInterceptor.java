@@ -3,6 +3,7 @@ package cn.darkjrong.license.verify.interceptor;
 import cn.darkjrong.license.core.common.manager.LicenseVerifyManager;
 import cn.darkjrong.license.core.common.pojo.params.LicenseExtraParam;
 import cn.darkjrong.license.verify.listener.VerifyListener;
+import cn.darkjrong.license.verify.listener.VerifyListenerFactory;
 import cn.darkjrong.spring.boot.autoconfigure.LicenseVerifyProperties;
 import de.schlichtherle.license.LicenseContent;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,9 @@ public class LicenseVerifyInterceptor implements HandlerInterceptor {
     @Autowired
     private LicenseVerifyProperties licenseVerifyProperties;
 
+    @Autowired
+    private VerifyListenerFactory verifyListenerFactory;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
@@ -38,7 +42,7 @@ public class LicenseVerifyInterceptor implements HandlerInterceptor {
             boolean compare = true;
 
             // 增加业务系统监听，是否自定义验证
-            List<VerifyListener> customListenerList = VerifyListener.getListenerList();
+            List<VerifyListener> customListenerList = verifyListenerFactory.getListenerList();
             for (VerifyListener listener : customListenerList) {
                 boolean verify = listener.verify(licenseCheck);
                 compare = compare && verify;
