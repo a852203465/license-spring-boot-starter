@@ -12,7 +12,7 @@
         </dependency>
 
 		<!-- 软件证书生成模块，负责拉取服务器硬件信息和生成、下载lic证书文件 -->
-	<dependency>
+	    <dependency>
             <groupId>cn.darkjrong</groupId>
             <artifactId>license-creator-spring-boot-starter</artifactId>
             <version>1.0</version>
