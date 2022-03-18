@@ -3,7 +3,7 @@
 ## 1. 模块说明
 
 ```xml
-        
+    <dependencies>
         <!-- 软件证书核心业务模块，提供lic相关模型类和通用api控制器 -->
         <dependency>
             <groupId>cn.darkjrong</groupId>
@@ -24,7 +24,7 @@
             <artifactId>license-verify-spring-boot-starter</artifactId>
             <version>1.0</version>
         </dependency>
-
+    </dependencies>
 ```
 
 ## 2. 使用方式说明
