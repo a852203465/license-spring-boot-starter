@@ -10,6 +10,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
 import org.quartz.Scheduler;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -20,13 +21,13 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 项目启动时安装证书&定时检测lic变化，自动更替lic
- *
+ * 项目停止卸载证书
  * @author Rong.Jia
  * @date 2022/03/10
  */
 @Slf4j
 @Component
-public class LicenseVerifyListener implements ApplicationListener<ContextRefreshedEvent> {
+public class LicenseVerifyListener implements ApplicationListener<ContextRefreshedEvent>, DisposableBean {
 
     @Autowired
     private LicenseVerifyProperties licenseVerifyProperties;
@@ -64,10 +65,15 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
 
     }
 
+    @Override
+    public void destroy() {
+        LicenseVerifyManager.uninstall(licenseVerifyProperties.getVerifyParam());
+    }
+
     /**
      * 安装证书
      */
-    protected void install() {
+    private void install() {
 
         log.info("++++++++ 开始安装证书 ++++++++");
 
