@@ -1,5 +1,6 @@
 package cn.darkjrong.license.core.common.utils;
 
+import cn.darkjrong.license.core.common.exceptions.LicenseException;
 import cn.darkjrong.license.core.common.pojo.params.LicenseExtraParam;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
@@ -46,7 +47,8 @@ public class ServerInfoUtils {
             result.setCpuSerial(ServerInfosContainer.cpuSerial);
             result.setMainBoardSerial(ServerInfosContainer.mainBoardSerial);
         } catch (Exception e) {
-            log.error("获取服务器硬件信息失败, {}", e.getMessage());
+            log.error("获取服务器硬件信息异常", e);
+            throw new LicenseException(String.format("获取服务器硬件信息异常, %s", e.getMessage()));
         }
         return result;
     }
