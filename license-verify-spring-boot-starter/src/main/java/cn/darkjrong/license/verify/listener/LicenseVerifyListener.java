@@ -36,7 +36,7 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
     private Scheduler scheduler;
 
     /**
-     * 文件唯一身份标识 == 相当于人类的指纹一样
+     * 文件唯一身份标识
      */
     private final AtomicReference<String> md5 = new AtomicReference<>(StrUtil.EMPTY);
 
@@ -44,10 +44,9 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
         if (StrUtil.isNotEmpty(licenseVerifyProperties.getLicensePath())) {
-            install();
-            if (FileUtil.exist(licenseVerifyProperties.getLicensePath())) {
+            if (FileUtil.exist(licenseVerifyProperties.getLicensePath()) && install()) {
                 String readMd5 = FileUtils.getMd5(licenseVerifyProperties.getLicensePath());
-                if (StrUtil.isBlank(md5.get())) {
+                if (StrUtil.isBlank(md5.get()) && StrUtil.isNotBlank(readMd5)) {
                     md5.set(readMd5);
                 }
             }
@@ -56,8 +55,8 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
         }
 
         QuartzTask quartzTask = QuartzTask.builder()
-                .jobName("LicenseListenerTask")
-                .cronExpression("0/10 * * * * ?")
+                .jobName(LicenseListenerTask.class.getName())
+                .cronExpression("0/5 * * * * ?")
                 .jobClass(LicenseListenerTask.class)
                 .build();
 
@@ -72,8 +71,10 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
 
     /**
      * 安装证书
+     *
+     * @return {@link Boolean}
      */
-    private void install() {
+    private Boolean install() {
 
         log.info("++++++++ 开始安装证书 ++++++++");
 
@@ -81,9 +82,11 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
         try {
             LicenseVerifyManager.install(licenseVerifyProperties.getVerifyParam());
             log.info("++++++++ 证书安装成功 ++++++++");
+            return Boolean.TRUE;
         }catch (Exception e) {
             log.error("++++++++ 证书安装失败 ++++++++");
         }
+        return Boolean.FALSE;
     }
 
     /**
@@ -99,10 +102,11 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
             if (FileUtil.exist(licenseVerifyProperties.getLicensePath())) {
                 String readMd5 = FileUtils.getMd5(licenseVerifyProperties.getLicensePath());
                 // 不相等，说明lic变化了
-                if (!StrUtil.equals(md5.get(), readMd5)) {
-                    install();
+                if (!StrUtil.equals(md5.get(), readMd5) && StrUtil.isNotBlank(readMd5) && install()) {
                     md5.set(readMd5);
                 }
+            }else {
+                log.warn("未检测到license文件，请提供");
             }
         }
     }
