@@ -107,6 +107,10 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
                 }
             }else {
                 log.warn("未检测到license文件，请提供");
+                if (StrUtil.isNotBlank(md5.get())) {
+                    LicenseVerifyManager.uninstall(licenseVerifyProperties.getVerifyParam());
+                    md5.set(StrUtil.EMPTY);
+                }
             }
         }
     }
