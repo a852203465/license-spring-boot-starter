@@ -2,6 +2,8 @@ package cn.darkjrong.license.core.common.manager;
 
 import cn.darkjrong.license.core.common.exceptions.LicenseException;
 import cn.darkjrong.license.core.common.pojo.params.LicenseCreatorParam;
+import cn.darkjrong.license.core.common.pojo.params.LicenseCreatorV2Param;
+import cn.darkjrong.license.core.common.pojo.vo.LicenseContentVO;
 import cn.darkjrong.license.core.common.utils.FileUtils;
 import cn.darkjrong.license.core.common.utils.ParamInitUtils;
 import cn.hutool.core.io.FileUtil;
@@ -42,6 +44,34 @@ public class LicenseCreatorManager {
             // 5、通过Lic管理器，将内容写入Lic文件中
             licenseManager.store(licenseContent, licenseFile);
             return licenseContent;
+        } catch (FileNotFoundException eex) {
+            log.error("私钥文件不存在", eex);
+            throw new LicenseException("私钥文件不存在, 请检查", eex);
+        } catch (Exception e){
+            log.error("证书生成失败", e);
+            throw new LicenseException("证书生成失败", e);
+        }
+    }
+
+    /**
+     * 生成License证书
+     *
+     * @param param       参数
+     * @return {@link LicenseContentVO}
+     */
+    public static LicenseContentVO generateLicense(LicenseCreatorV2Param param){
+        try {
+            // 1、根据外部传入的创建Lic的参数信息初始化lic参数（秘钥部分）
+            LicenseParam licenseParam = ParamInitUtils.initLicenseParam(param);
+            // 2、根据外部传入的创建Lic的属性信息初始化lic内容（除了truelicense自带的还包括自己定义的）
+            LicenseContent licenseContent = ParamInitUtils.initLicenseContent(param);
+            // 3、构建Lic管理器
+            LicenseManager licenseManager = new LicenseCustomManager(licenseParam);
+            // 5、通过Lic管理器，将内容写入Lic文件中
+            LicenseContentVO licenseContentVO = new LicenseContentVO();
+            licenseContentVO.setContent(licenseContent);
+            licenseContentVO.setLic(licenseManager.create(licenseContent));
+            return licenseContentVO;
         } catch (FileNotFoundException eex) {
             log.error("私钥文件不存在", eex);
             throw new LicenseException("私钥文件不存在, 请检查", eex);

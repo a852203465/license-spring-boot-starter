@@ -2,6 +2,8 @@ package cn.darkjrong.license.creator.service.impl;
 
 import cn.darkjrong.license.core.common.manager.LicenseCreatorManager;
 import cn.darkjrong.license.core.common.pojo.params.LicenseCreatorParam;
+import cn.darkjrong.license.core.common.pojo.params.LicenseCreatorV2Param;
+import cn.darkjrong.license.core.common.pojo.vo.LicenseContentVO;
 import cn.darkjrong.license.core.common.utils.FileUtils;
 import cn.darkjrong.license.core.common.utils.ServerInfoUtils;
 import cn.darkjrong.license.creator.service.LicenseCreatorService;
@@ -43,6 +45,19 @@ public class LicenseCreatorServiceImpl implements LicenseCreatorService {
         return fileName;
     }
 
+    @Override
+    public byte[] generateLicense(LicenseCreatorV2Param param) {
+
+        LicenseContentVO licenseContentVO = LicenseCreatorManager.generateLicense(param);
+
+        String message = MessageFormat.format("证书生成成功，证书有效期：{0} - {1}",
+                DateUtil.format(licenseContentVO.getContent().getNotBefore(), DatePattern.NORM_DATETIME_FORMAT),
+                DateUtil.format(licenseContentVO.getContent().getNotAfter(), DatePattern.NORM_DATETIME_FORMAT));
+
+        log.info(message);
+
+        return licenseContentVO.getLic();
+    }
 
 
 }

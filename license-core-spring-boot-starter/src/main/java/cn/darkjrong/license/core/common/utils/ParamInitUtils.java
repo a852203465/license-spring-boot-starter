@@ -1,10 +1,7 @@
 package cn.darkjrong.license.core.common.utils;
 
-import cn.darkjrong.license.core.common.pojo.params.CustomKeyStoreParam;
-import cn.darkjrong.license.core.common.pojo.params.LicenseCreatorParam;
-import cn.darkjrong.license.core.common.pojo.params.LicenseExtraParam;
-import cn.darkjrong.license.core.common.pojo.params.LicenseVerifyParam;
 import cn.darkjrong.license.core.common.manager.LicenseVerifyManager;
+import cn.darkjrong.license.core.common.pojo.params.*;
 import cn.hutool.core.convert.Convert;
 import de.schlichtherle.license.*;
 
@@ -38,6 +35,21 @@ public class ParamInitUtils {
         CipherParam cipherParam = new DefaultCipherParam(param.getPassword());
         KeyStoreParam privateStoreParam = new CustomKeyStoreParam(LicenseCreator.class,
                 param.getPrivateKeysStorePath(), param.getPrivateAlias(),
+                param.getPassword(), param.getPassword());
+        return new DefaultLicenseParam(param.getSubject(), preferences, privateStoreParam, cipherParam);
+    }
+
+    /**
+     * <p>初始化证书生成参数</p>
+     *
+     * @param param GxLicenseCreatorParam 生成证书参数
+     * @return LicenseParam 证书参数
+     */
+    public static LicenseParam initLicenseParam(LicenseCreatorV2Param param) {
+        Preferences preferences = Preferences.userNodeForPackage(LicenseCreator.class);
+        // 设置对证书内容加密的秘钥
+        CipherParam cipherParam = new DefaultCipherParam(param.getPassword());
+        KeyStoreParam privateStoreParam = new CustomKeyStoreV2Param(param.getPrivateKeysStore(), param.getPrivateAlias(),
                 param.getPassword(), param.getPassword());
         return new DefaultLicenseParam(param.getSubject(), preferences, privateStoreParam, cipherParam);
     }

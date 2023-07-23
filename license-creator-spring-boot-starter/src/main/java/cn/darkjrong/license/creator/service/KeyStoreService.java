@@ -1,5 +1,7 @@
 package cn.darkjrong.license.creator.service;
 
+import cn.darkjrong.license.creator.domain.SecretKey;
+
 /**
  * 密钥存储服务
  *
@@ -26,7 +28,14 @@ public interface KeyStoreService {
      */
     byte[] genPublicCerts(Long validity, String password);
 
-
+    /**
+     * 生成秘钥
+     *
+     * @param validity 证书有效期(单位：年), 默认：1
+     * @param password 密码
+     * @return {@link byte[]}
+     */
+    SecretKey genSecretKey(Long validity, String password);
 
 
 
