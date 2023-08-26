@@ -49,8 +49,8 @@ public class ParamInitUtils {
         Preferences preferences = Preferences.userNodeForPackage(LicenseCreator.class);
         // 设置对证书内容加密的秘钥
         CipherParam cipherParam = new DefaultCipherParam(param.getPassword());
-        KeyStoreParam privateStoreParam = new CustomKeyStoreV2Param(param.getPrivateKeysStore(), param.getPrivateAlias(),
-                param.getPassword(), param.getPassword());
+        KeyStoreParam privateStoreParam = new CustomKeyStoreV2Param(param.getPrivateKeysStore()
+                , param.getPrivateAlias(), param.getPassword(), param.getPassword());
         return new DefaultLicenseParam(param.getSubject(), preferences, privateStoreParam, cipherParam);
     }
 

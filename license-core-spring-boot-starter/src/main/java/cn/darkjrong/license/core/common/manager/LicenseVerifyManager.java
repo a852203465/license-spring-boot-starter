@@ -44,7 +44,7 @@ public class LicenseVerifyManager {
             // 开始安装
             return licenseManager.install(licenseFile);
         }catch (Exception e){
-            log.error("证书安装异常 {}", e.getMessage());
+            log.error("证书安装异常", e);
             throw new LicenseException("证书安装异常", e);
         }
     }
