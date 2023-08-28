@@ -77,10 +77,11 @@ public class KeyStoreUtils {
      *
      * @param validity 证书有效期(单位：年)
      * @param alias    别名
-     * @param password 密码
+     * @param storePwd 秘钥库密码
+     * @param keyPwd 私钥密码
      * @return {@link byte[]}
      */
-    public static byte[] genkeyPair(String alias, Long validity, String password) {
+    public static byte[] genkeyPair(String alias, Long validity, String storePwd, String keyPwd) {
 
         ByteArrayOutputStream out = null;
         try {
@@ -95,8 +96,8 @@ public class KeyStoreUtils {
             chain[0] = keypair.getSelfCertificate(x500Name, new Date(),validity * YEAR);
 
             out = new ByteArrayOutputStream(KEY_SIZE);
-            ks.setKeyEntry(alias, privateKey, password.toCharArray(), chain);
-            ks.store(out, password.toCharArray());
+            ks.setKeyEntry(alias, privateKey, keyPwd.toCharArray(), chain);
+            ks.store(out, storePwd.toCharArray());
             return out.toByteArray();
         }catch (Exception e) {
             log.error("秘钥库生成异常", e);
@@ -129,11 +130,12 @@ public class KeyStoreUtils {
      * 获取cer证书
      *
      * @param keyPair 密钥对
-     * @param alias   别名
+     * @param alias
+     * @param storePwd 秘钥库密码
      * @return {@link byte[]}
      */
-    public static byte[] getCer(byte[] keyPair, String alias, String password) {
-        KeyStore keyStore = loadKeyStore(keyPair, password);
+    public static byte[] getCer(byte[] keyPair, String alias, String storePwd) {
+        KeyStore keyStore = loadKeyStore(keyPair, storePwd);
         try {
             Certificate certificate = keyStore.getCertificate(alias);
             return certificate.getEncoded();

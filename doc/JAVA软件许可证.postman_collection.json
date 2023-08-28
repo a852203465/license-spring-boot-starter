@@ -1,0 +1,175 @@
+{
+	"info": {
+		"_postman_id": "23dcbe08-3900-4e73-821b-33fc3ddd9aff",
+		"name": "JAVA软件许可证",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4728293"
+	},
+	"item": [
+		{
+			"name": "获取申请码",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8081/license/getAppCode",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"license",
+						"getAppCode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "生成许可证文件",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\r\n      \"keyPwd\": \"123456a123456\",\r\n      \"storePwd\": \"123456abc\",\r\n      \"privateKeysStorePath\": \"G:/workspace/demo/license-demo/keystore/privateKeys.keystore\",\r\n      \"consumerAmount\": 1,\r\n      \"expiryTime\": \"2024-07-23 14:05:00\",\r\n      \"appCode\": \"edb7859d4d9fb2f4719c1d89ef9fbf253de6c543335b7af651f169c9cdff4d2bdcf6e8c04c5c6f47d597fc96dfa8dcdbaada91a06b223a99fd092b2d00dc5f70ababfaa5852e7737d6ede60c7f4a6b5c7235b9a5b87157a62641a76b37dd9a4668564a69d4fa3dffa6c6dabf91e5949be73641fb3c2137a6c2178717c17317c224ff9360d5b032b9773e38738fd1b24fe36db7fee8eb77bd23628e373982142a17e27996c644d22efde0f6230ae338edfe9c8d07e59505f507d9864fc0417578eb76564cce7b9827d09deed0aa1cf8844a87dfa63dbf1e6dde75944bfc52dd67\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8088/license/generate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"license",
+						"generate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "下载许可证",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8088/license/download?path=G:/workspace-idea/license-demo/lic/20220317/license.lic",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"license",
+						"download"
+					],
+					"query": [
+						{
+							"key": "path",
+							"value": "G:/workspace-idea/license-demo/lic/20220317/license.lic",
+							"description": "许可证路径"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "生成私钥",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8088/license/privateKeys?validity=10&storePwd=123456abc&keyPwd=123456a123456",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"license",
+						"privateKeys"
+					],
+					"query": [
+						{
+							"key": "validity",
+							"value": "10",
+							"description": "证书有效期(单位：年), 默认：1"
+						},
+						{
+							"key": "storePwd",
+							"value": "123456abc",
+							"description": "秘钥库密码"
+						},
+						{
+							"key": "keyPwd",
+							"value": "123456a123456",
+							"description": "私钥密码"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "生成公钥",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8088/license/publicCerts?validity=10&storePwd=123456abc&publicPwd=12345678910abc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"license",
+						"publicCerts"
+					],
+					"query": [
+						{
+							"key": "validity",
+							"value": "10",
+							"description": "证书有效期(单位：年), 默认：1"
+						},
+						{
+							"key": "storePwd",
+							"value": "123456abc",
+							"description": "秘钥库密码"
+						},
+						{
+							"key": "publicPwd",
+							"value": "12345678910abc",
+							"description": "公钥密码"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

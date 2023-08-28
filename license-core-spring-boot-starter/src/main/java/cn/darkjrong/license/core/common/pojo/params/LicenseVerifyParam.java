@@ -31,9 +31,14 @@ public class LicenseVerifyParam implements Serializable {
     private String publicAlias;
 
     /**
-     * 访问公钥库的密码
+     * 公钥访问密码
      */
-    private String storePass;
+    private String publicPwd = "";
+
+    /**
+     * 秘钥库访问密码
+     */
+    private String storePwd = "";
 
     /**
      * 证书生成路径

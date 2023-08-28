@@ -28,7 +28,7 @@ public class CustomKeyStoreParam extends AbstractKeyStoreParam {
      * @param clazz    Class
      * @param resource 公钥/私钥在磁盘上的存储路径
      * @param alias    别名
-     * @param storePwd 访问私钥库的密码
+     * @param storePwd 公钥库访问密码
      * @param keyPwd   私钥密码
      */
     public CustomKeyStoreParam(final Class clazz, final String resource, final String alias, final String storePwd, final String keyPwd) {

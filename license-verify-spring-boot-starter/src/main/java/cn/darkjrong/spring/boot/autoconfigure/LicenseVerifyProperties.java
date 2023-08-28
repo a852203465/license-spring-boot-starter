@@ -29,9 +29,14 @@ public class LicenseVerifyProperties {
     private String publicKeysStorePath = "/publicCerts.keystore";
 
     /**
-     * 私钥库密码
+     * 公钥访问密码
      */
-    private String password = "";
+    private String publicPwd = "";
+
+    /**
+     * 秘钥库访问密码
+     */
+    private String storePwd = "";
 
     /**
      * 公钥别名
@@ -49,11 +54,14 @@ public class LicenseVerifyProperties {
     private List<String> excludePathPatterns = new ArrayList<>();
 
     public LicenseVerifyParam getVerifyParam() {
-        Assert.notBlank(password, "密码不能为空");
+        Assert.notBlank(storePwd, "秘钥库密码不能为空");
+        Assert.notBlank(publicPwd, "公钥密码不能为空");
+
         LicenseVerifyParam param = new LicenseVerifyParam();
         param.setSubject(subject);
         param.setPublicAlias(publicAlias);
-        param.setStorePass(password);
+        param.setPublicPwd(publicPwd);
+        param.setStorePwd(storePwd);
         param.setLicensePath(licensePath);
         param.setPublicKeysStorePath(publicKeysStorePath);
         return param;

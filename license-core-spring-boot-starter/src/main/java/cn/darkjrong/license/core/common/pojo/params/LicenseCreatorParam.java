@@ -24,9 +24,14 @@ public class LicenseCreatorParam implements Serializable {
     private String subject = "软件许可证书";
 
     /**
-     * 私钥密码（需要妥善保管，不能让使用者知道
+     * 私钥密码（需要妥善保管，不能让使用者知道）
      */
-    private String password;
+    private String keyPwd;
+
+    /**
+     * 访问密钥库的密码
+     */
+    private String storePwd;
 
     /**
      * 私钥别名

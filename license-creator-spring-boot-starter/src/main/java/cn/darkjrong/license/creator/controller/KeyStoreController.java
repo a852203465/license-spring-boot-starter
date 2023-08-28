@@ -3,8 +3,6 @@ package cn.darkjrong.license.creator.controller;
 import cn.darkjrong.license.core.common.utils.KeyStoreUtils;
 import cn.darkjrong.license.creator.service.FileService;
 import cn.darkjrong.license.creator.service.KeyStoreService;
-import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.ReUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/license")
 public class KeyStoreController {
 
-    private static final String PWD_REG = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$";
-
     @Autowired
     private KeyStoreService keyStoreService;
 
@@ -38,19 +34,18 @@ public class KeyStoreController {
      * 生成私钥
      *
      * @param validity 证书有效期(单位：年), 默认：1
-     * @param password 密码
+     * @param storePwd 秘钥库密码
+     * @param keyPwd 私钥密码
      * @param request 请求
      * @param response   响应
      */
     @GetMapping("/privateKeys")
     public void genPrivateKeys(@RequestParam(value = "validity", defaultValue = "1") Long validity,
-                               @RequestParam(value = "password") String password,
+                               @RequestParam(value = "storePwd") String storePwd,
+                               @RequestParam(value = "keyPwd") String keyPwd,
                                HttpServletRequest request, HttpServletResponse response) {
 
-        Assert.notBlank(password, "密码不能为空");
-        Assert.isTrue(ReUtil.isMatch(PWD_REG, password), "密码必须由字母和数字组成的至少6个字符组成");
-
-        byte[] privateKeys = keyStoreService.genPrivateKeys(validity, password);
+        byte[] privateKeys = keyStoreService.genPrivateKeys(validity, storePwd, keyPwd);
         fileService.download(privateKeys, KeyStoreUtils.PRIVATE_KEYS, request, response);
     }
 
@@ -58,19 +53,17 @@ public class KeyStoreController {
      * 生成公钥
      *
      * @param validity 证书有效期(单位：年), 默认：1
-     * @param password 密码
-     * @param request 请求
+     * @param storePwd 秘钥库密码
+     * @param publicPwd 公钥密码
      * @param response   响应
      */
     @GetMapping("/publicCerts")
     public void genPublicCerts(@RequestParam(value = "validity", defaultValue = "1") Long validity,
-                               @RequestParam(value = "password") String password,
+                               @RequestParam(value = "storePwd") String storePwd,
+                               @RequestParam(value = "publicPwd") String publicPwd,
                                HttpServletRequest request, HttpServletResponse response) {
 
-        Assert.notBlank(password, "密码不能为空");
-        Assert.isTrue(ReUtil.isMatch(PWD_REG, password), "密码必须由字母和数字组成的至少6个字符组成");
-
-        byte[] privateKeys = keyStoreService.genPublicCerts(validity, password);
+        byte[] privateKeys = keyStoreService.genPublicCerts(validity, storePwd, publicPwd);
         fileService.download(privateKeys, KeyStoreUtils.PUBLIC_CERTS, request, response);
     }
 

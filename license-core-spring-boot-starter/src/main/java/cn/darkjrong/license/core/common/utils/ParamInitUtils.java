@@ -21,7 +21,7 @@ public class ParamInitUtils {
     /**
      * 证书的发行者和主体字段信息
      */
-    private final static X500Principal DEFAULT_HOLDER_AND_ISSUER = new X500Principal("CN=a, OU=a, O=a, L=a, ST=a, C=a");
+    private final static X500Principal DEFAULT_HOLDER_AND_ISSUER = new X500Principal("CN=localhost, OU=localhost, O=localhost, L=WX, ST=SH, C=CN");
 
     /**
      * <p>初始化证书生成参数</p>
@@ -32,10 +32,10 @@ public class ParamInitUtils {
     public static LicenseParam initLicenseParam(LicenseCreatorParam param) {
         Preferences preferences = Preferences.userNodeForPackage(LicenseCreator.class);
         // 设置对证书内容加密的秘钥
-        CipherParam cipherParam = new DefaultCipherParam(param.getPassword());
+        CipherParam cipherParam = new DefaultCipherParam(param.getStorePwd());
         KeyStoreParam privateStoreParam = new CustomKeyStoreParam(LicenseCreator.class,
                 param.getPrivateKeysStorePath(), param.getPrivateAlias(),
-                param.getPassword(), param.getPassword());
+                param.getStorePwd(), param.getKeyPwd());
         return new DefaultLicenseParam(param.getSubject(), preferences, privateStoreParam, cipherParam);
     }
 
@@ -48,9 +48,9 @@ public class ParamInitUtils {
     public static LicenseParam initLicenseParam(LicenseCreatorV2Param param) {
         Preferences preferences = Preferences.userNodeForPackage(LicenseCreator.class);
         // 设置对证书内容加密的秘钥
-        CipherParam cipherParam = new DefaultCipherParam(param.getPassword());
-        KeyStoreParam privateStoreParam = new CustomKeyStoreV2Param(param.getPrivateKeysStore()
-                , param.getPrivateAlias(), param.getPassword(), param.getPassword());
+        CipherParam cipherParam = new DefaultCipherParam(param.getStorePwd());
+        KeyStoreParam privateStoreParam = new CustomKeyStoreV2Param(param.getPrivateKeysStore(),
+                param.getPrivateAlias(), param.getStorePwd(), param.getKeyPwd());
         return new DefaultLicenseParam(param.getSubject(), preferences, privateStoreParam, cipherParam);
     }
 
@@ -90,10 +90,10 @@ public class ParamInitUtils {
      */
     public static LicenseParam initLicenseParam(LicenseVerifyParam param) {
         Preferences preferences = Preferences.userNodeForPackage(LicenseVerifyManager.class);
-        CipherParam cipherParam = new DefaultCipherParam(param.getStorePass());
+        CipherParam cipherParam = new DefaultCipherParam(param.getStorePwd());
         KeyStoreParam publicStoreParam = new CustomKeyStoreParam(LicenseVerifyManager.class,
                 param.getPublicKeysStorePath(), param.getPublicAlias(),
-                param.getStorePass(), null);
+                param.getPublicPwd(), null);
         return new DefaultLicenseParam(param.getSubject(), preferences, publicStoreParam, cipherParam);
     }
 }
