@@ -35,10 +35,10 @@ public class KeyStoreUtils {
      * ST=(州或省份名称), C=(单位的两字母国家代码)"
      */
     private static final String CN = "localhost:8080";
-    private static final String OU = "zlex";
-    private static final String O = "zlex";
-    private static final String L = "BJ";
-    private static final String ST = "BJ";
+    private static final String OU = "cn.darkjrong";
+    private static final String O = "cn.darkjrong";
+    private static final String L = "WX";
+    private static final String ST = "JS";
     private static final String C = "CN";
 
     /**

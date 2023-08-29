@@ -21,7 +21,7 @@ public class ParamInitUtils {
     /**
      * 证书的发行者和主体字段信息
      */
-    private final static X500Principal DEFAULT_HOLDER_AND_ISSUER = new X500Principal("CN=localhost, OU=localhost, O=localhost, L=WX, ST=SH, C=CN");
+    private final static X500Principal DEFAULT_HOLDER_AND_ISSUER = new X500Principal("CN=localhost:8080, OU=cn.darkjrong, O=cn.darkjrong, L=WX, ST=JS, C=CN");
 
     /**
      * <p>初始化证书生成参数</p>

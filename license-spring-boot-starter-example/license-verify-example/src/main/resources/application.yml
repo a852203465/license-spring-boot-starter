@@ -1,0 +1,11 @@
+server:
+  port: 8081
+
+license:
+  verify:
+    storePwd: 123456abc # 秘钥库加载密码
+    public-pwd: 12345678910abc # 公钥库访问密码
+    license-path: G:\workspace\github\license-spring-boot-starter/license/license.lic
+    public-keys-store-path: G:\workspace\github\license-spring-boot-starter/license/publicCerts.keystore
+
+
