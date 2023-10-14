@@ -79,7 +79,11 @@ public class ParamInitUtils {
         // 设置证书描述信息
         licenseContent.setInfo(param.getDescription());
         // 设置证书扩展信息（对象 -- 额外的ip、mac、cpu等信息）
-        licenseContent.setExtra(EncryptionUtils.decode(Convert.toStr(param.getAppCode()), LicenseExtraParam.class));
+        LicenseExtraParam licenseExtraParam = EncryptionUtils.decode(Convert.toStr(param.getAppCode()), LicenseExtraParam.class);
+        licenseExtraParam.setCheckIpAddress(param.getCheckIpAddress());
+        licenseExtraParam.setCheckMacAddress(param.getCheckMacAddress());
+        licenseContent.setExtra(licenseExtraParam);
+
         return licenseContent;
     }
 

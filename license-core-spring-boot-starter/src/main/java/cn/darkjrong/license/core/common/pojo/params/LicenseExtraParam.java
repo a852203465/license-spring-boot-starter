@@ -40,8 +40,14 @@ public class LicenseExtraParam implements Serializable {
      */
     private String mainBoardSerial;
 
+    /**
+     * 验证IP地址
+     */
+    private Boolean checkIpAddress = Boolean.TRUE;
 
-
-
+    /**
+     * 验证mac地址
+     */
+    private Boolean checkMacAddress = Boolean.TRUE;
 
 }

@@ -64,6 +64,19 @@ public class LicenseCreatorParam implements Serializable {
      */
     private String appCode;
 
+    /**
+     * 验证IP地址
+     */
+    private Boolean checkIpAddress = Boolean.TRUE;
+
+    /**
+     * 验证mac地址
+     */
+    private Boolean checkMacAddress = Boolean.TRUE;
+
+
+
+
 
 
 }

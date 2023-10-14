@@ -151,13 +151,13 @@ public class LicenseCustomManager extends LicenseManager {
         LicenseExtraParam serverCheckModel = ServerInfoUtils.getServerInfos();
         if (expectedCheck != null) {
             //校验IP地址
-            if (!checkIpAddress(expectedCheck.getIpAddress(), serverCheckModel.getIpAddress())) {
+            if (expectedCheck.getCheckIpAddress() && !checkIpAddress(expectedCheck.getIpAddress(), serverCheckModel.getIpAddress())) {
                 String message = "系统证书无效，当前服务器的IP没在授权范围内";
                 log.error(message);
                 throw new LicenseContentException(message);
             }
             //校验Mac地址
-            if (!checkIpAddress(expectedCheck.getMacAddress(), serverCheckModel.getMacAddress())) {
+            if (expectedCheck.getCheckMacAddress() && !checkIpAddress(expectedCheck.getMacAddress(), serverCheckModel.getMacAddress())) {
                 String message = "系统证书无效，当前服务器的Mac地址没在授权范围内";
                 log.error(message);
                 throw new LicenseContentException(message);
