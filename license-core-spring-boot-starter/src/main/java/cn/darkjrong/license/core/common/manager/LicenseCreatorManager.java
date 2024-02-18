@@ -45,10 +45,10 @@ public class LicenseCreatorManager {
             licenseManager.store(licenseContent, licenseFile);
             return licenseContent;
         } catch (FileNotFoundException eex) {
-            log.error("私钥文件不存在", eex);
+            log.error(String.format("generateLicense.FileNotFoundException() 私钥文件不存在, 【%s】", eex.getMessage()), eex);
             throw new LicenseException("私钥文件不存在, 请检查", eex);
         } catch (Exception e){
-            log.error("证书生成失败", e);
+            log.error(String.format("generateLicense.Exception() 证书生成失败, 【%s】", e.getMessage()), e);
             throw new LicenseException("证书生成失败", e);
         }
     }
@@ -73,10 +73,10 @@ public class LicenseCreatorManager {
             licenseContentVO.setLic(licenseManager.create(licenseContent));
             return licenseContentVO;
         } catch (FileNotFoundException eex) {
-            log.error("私钥文件不存在", eex);
+            log.error(String.format("generateLicense.FileNotFoundException() 私钥文件不存在, 【%s】", eex.getMessage()), eex);
             throw new LicenseException("私钥文件不存在, 请检查", eex);
         } catch (Exception e){
-            log.error("证书生成失败", e);
+            log.error(String.format("generateLicense.Exception() 证书生成失败, 【%s】", e.getMessage()), e);
             throw new LicenseException("证书生成失败", e);
         }
     }
@@ -98,11 +98,11 @@ public class LicenseCreatorManager {
             licenseManager.store(licenseContent,licenseFile);
             return FileUtil.readBytes(licenseFile);
         }catch (FileNotFoundException eex) {
-            log.error("证书文件不存在", eex);
+            log.error(String.format("download.FileNotFoundException() 私钥文件不存在, 【%s】", eex.getMessage()), eex);
             throw new LicenseException("证书文件不存在, 请检查", eex);
         } catch (Exception e){
-            log.error("证书下载失败", e);
-            throw new LicenseException("证书下载失败", e);
+            log.error(String.format("download.Exception() 证书生成失败, 【%s】", e.getMessage()), e);
+            throw new LicenseException("证书生成失败", e);
         }finally {
             FileUtils.del(licenseFile);
         }

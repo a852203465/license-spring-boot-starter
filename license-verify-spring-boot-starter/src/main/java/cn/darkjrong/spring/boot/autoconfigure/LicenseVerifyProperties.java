@@ -54,8 +54,8 @@ public class LicenseVerifyProperties {
     private List<String> excludePathPatterns = new ArrayList<>();
 
     public LicenseVerifyParam getVerifyParam() {
-        Assert.notBlank(storePwd, "秘钥库密码不能为空");
-        Assert.notBlank(publicPwd, "公钥密码不能为空");
+        Assert.notBlank(storePwd, "秘钥库密码不能为空,请检查配置");
+        Assert.notBlank(publicPwd, "公钥密码不能为空,请检查配置");
 
         LicenseVerifyParam param = new LicenseVerifyParam();
         param.setSubject(subject);

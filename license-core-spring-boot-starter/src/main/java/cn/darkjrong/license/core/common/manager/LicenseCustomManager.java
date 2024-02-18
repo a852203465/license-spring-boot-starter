@@ -1,5 +1,6 @@
 package cn.darkjrong.license.core.common.manager;
 
+import cn.darkjrong.license.core.common.exceptions.LicenseExpiredException;
 import cn.darkjrong.license.core.common.pojo.params.LicenseExtraParam;
 import cn.darkjrong.license.core.common.utils.ServerInfoUtils;
 import cn.hutool.core.collection.CollUtil;
@@ -80,7 +81,7 @@ public class LicenseCustomManager extends LicenseManager {
     protected synchronized LicenseContent verify(final LicenseNotary notary) throws Exception {
         final byte[] key = getLicenseKey();
         if (null == key) {
-            throw new NoLicenseInstalledException(getLicenseParam().getSubject());
+            throw new NoLicenseInstalledException(String.format("主题 【%s】的证书未安装,请检查", getLicenseParam().getSubject()));
         }
         GenericCertificate certificate = getPrivacyGuard().key2cert(key);
         notary.verify(certificate);
@@ -138,7 +139,7 @@ public class LicenseCustomManager extends LicenseManager {
         final Date now = new Date();
         final Date notAfter = content.getNotAfter();
         if (now.after(notAfter)) {
-            throw new LicenseContentException("系统证书过期，当前时间已超过证书有效期 -- " + DateUtil.format(content.getNotAfter(), DatePattern.NORM_DATETIME_FORMAT));
+            throw new LicenseExpiredException(String.format("系统证书已过期,当前时间已超过证书有效期,证书有效期至[%s]", DateUtil.format(content.getNotAfter(), DatePattern.NORM_DATETIME_FORMAT)));
         }
 
         //1、 首先调用父类的validate方法

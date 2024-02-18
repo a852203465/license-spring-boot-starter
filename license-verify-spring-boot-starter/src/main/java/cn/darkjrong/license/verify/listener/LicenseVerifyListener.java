@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
 import org.quartz.Scheduler;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -27,7 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Slf4j
 @Component
-public class LicenseVerifyListener implements ApplicationListener<ContextRefreshedEvent>, DisposableBean {
+public class LicenseVerifyListener implements ApplicationListener<ContextRefreshedEvent>, InitializingBean, DisposableBean {
 
     @Autowired
     private LicenseVerifyProperties licenseVerifyProperties;
@@ -66,7 +67,12 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
 
     @Override
     public void destroy() {
-        LicenseVerifyManager.uninstall(licenseVerifyProperties.getVerifyParam());
+        try {
+            LicenseVerifyManager.uninstall(licenseVerifyProperties.getVerifyParam());
+            Thread.currentThread().join();
+        } catch (InterruptedException e) {
+            log.error(String.format("卸载证书异常, %s", e.getMessage()), e);
+        }
     }
 
     /**
@@ -84,9 +90,18 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
             log.info("++++++++ 证书安装成功 ++++++++");
             return Boolean.TRUE;
         }catch (Exception e) {
-            log.error("++++++++ 证书安装失败 ++++++++");
+            log.error(String.format("++++++++ 证书安装失败 ++++++++ 【%s】", e.getMessage()), e);
         }
         return Boolean.FALSE;
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        try {
+            LicenseVerifyManager.uninstall(licenseVerifyProperties.getVerifyParam());
+        } catch (Exception e) {
+            log.error(String.format("初始卸载证书异常, %s", e.getMessage()), e);
+        }
     }
 
     /**
@@ -106,7 +121,7 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
                     md5.set(readMd5);
                 }
             }else {
-                log.warn("未检测到license文件，请提供");
+                log.error("未检测到license文件，请提供");
                 if (StrUtil.isNotBlank(md5.get())) {
                     LicenseVerifyManager.uninstall(licenseVerifyProperties.getVerifyParam());
                     md5.set(StrUtil.EMPTY);

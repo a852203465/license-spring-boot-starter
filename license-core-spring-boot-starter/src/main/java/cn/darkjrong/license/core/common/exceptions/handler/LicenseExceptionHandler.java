@@ -28,9 +28,7 @@ public class LicenseExceptionHandler {
      */
     @ExceptionHandler(value = LicenseException.class)
     public ResponseVO licenseExceptionHandler(LicenseException e) {
-
         log.error("licenseExceptionHandler  {}", e.getMessage());
-
         return ResponseVO.error(ResponseEnum.ERROR.getCode(), e.getMessage());
     }
 
@@ -42,25 +40,18 @@ public class LicenseExceptionHandler {
      */
     @ExceptionHandler(value = IllegalArgumentException.class)
     public ResponseVO illegalArgumentExceptionHandler(IllegalArgumentException e){
-
         log.error("illegalArgumentExceptionHandler  {}", ExceptionUtil.stacktraceToString(e));
-
         return ResponseVO.error(ResponseEnum.PARAMETER_ERROR.getCode(), e.getMessage());
     }
 
     /**
      *  捕捉404异常
      * @param e 404 异常
-     * @date 2019/04/17 09:46:22
-     * @return
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseVO noHandlerFoundHandle(NoHandlerFoundException e) {
-
         log.error("noHandlerFoundHandle {}", ExceptionUtil.stacktraceToString(e));
-
         return ResponseVO.error(ResponseEnum.NOT_FOUND);
-
     }
 
 
