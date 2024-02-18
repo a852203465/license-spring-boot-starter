@@ -41,9 +41,6 @@ public class LicenseVerifyManager {
             //走自定义的Lic管理
             LicenseCustomManager licenseManager = new LicenseCustomManager(licenseParam);
 
-            // 如果之前安装过证书，先卸载之前的证书 == 给null
-            licenseManager.uninstall();
-
             // 获取要安装的证书文件
             File licenseFile = ResourceUtils.getFile(param.getLicensePath());
 
@@ -51,6 +48,9 @@ public class LicenseVerifyManager {
                 log.error(String.format("证书文件 【%s】不存在,请提供正确文件", param.getLicensePath()));
                 throw new LicenseException(String.format("证书文件 【%s】不存在,请提供正确文件", param.getLicensePath()));
             }
+
+            // 如果之前安装过证书，先卸载之前的证书 == 给null
+            licenseManager.uninstall();
 
             // 开始安装
             return licenseManager.install(licenseFile);
