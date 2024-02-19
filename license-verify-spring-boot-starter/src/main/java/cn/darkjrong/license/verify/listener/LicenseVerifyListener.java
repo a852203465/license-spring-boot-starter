@@ -67,6 +67,7 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
     @Override
     public void destroy() {
         LicenseVerifyManager.uninstall(licenseVerifyProperties.getVerifyParam());
+        QuartzUtils.interrupt(scheduler, LicenseListenerTask.class.getName());
         md5.clear();
     }
 
