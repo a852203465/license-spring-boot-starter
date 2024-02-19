@@ -43,36 +43,6 @@ public class FileUtils {
     public static final String KEY_STORE_DIR = StrUtil.replace(ServerInfoUtils.getServerTempPath(), File.separator, FileUtils.SEPARATOR) + FileUtils.SEPARATOR + KEY_STORE + FileUtils.SEPARATOR;
 
     /**
-     * 获取文件的md5
-     *
-     * @param file 文件路径
-     * @return {@link String}
-     */
-    public static String getMd5(File file) {
-        try {
-            return DigestUtil.md5Hex(file);
-        } catch (Exception e) {
-            log.error("许可证文件不存在 {}", e.getMessage());
-        }
-        return null;
-    }
-
-    /**
-     * 获取文件的md5
-     *
-     * @param file 文件路径
-     * @return {@link String}
-     */
-    public static String getMd5(String file) {
-        try {
-            return DigestUtil.md5Hex(file);
-        } catch (Exception e) {
-            log.error("许可证文件不存在 {}", e.getMessage());
-        }
-        return null;
-    }
-
-    /**
      * 获取最新的文件
      *
      * @param dir dir
