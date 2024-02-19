@@ -66,13 +66,8 @@ public class LicenseVerifyListener implements ApplicationListener<ContextRefresh
 
     @Override
     public void destroy() {
-        try {
-            LicenseVerifyManager.uninstall(licenseVerifyProperties.getVerifyParam());
-            md5.clear();
-            Thread.currentThread().join();
-        } catch (InterruptedException e) {
-            log.error(String.format("卸载证书异常, %s", e.getMessage()), e);
-        }
+        LicenseVerifyManager.uninstall(licenseVerifyProperties.getVerifyParam());
+        md5.clear();
     }
 
     /**
